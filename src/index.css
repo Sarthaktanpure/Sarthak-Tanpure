@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-void: #05070A;
+  --color-panel: #0B0F14;
+  --color-hairline: #1B222B;
+  --color-text: #EDEBE4;
+  --color-muted: #7C8794;
+  --color-accent: #3DF2FF;
+  --color-alert: #FF3B4E;
+  --color-amber: #FFB347;
+  
+  /* Dynamic atmosphere color updated by scroll */
+  --atmosphere-ambient: rgba(61, 242, 255, 0.03);
+  --atmosphere-dawn: 0%;
+}
+
+/* Custom fine-grain scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #05070A;
+}
+::-webkit-scrollbar-thumb {
+  background: #1B222B;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3DF2FF;
+}
+
+/* Film Grain layer (~4% opacity) */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Scanline effect */
+.scanlines-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 998;
+  opacity: 0.035;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.35) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+}
+
+/* Vignette */
+.vignette-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 997;
+  background: radial-gradient(circle at center, transparent 55%, rgba(5, 7, 10, 0.75) 100%);
+}
+
+/* Targeting UI corner brackets */
+.bracket-box {
+  position: relative;
+}
+.bracket-box::before,
+.bracket-box::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+  border-color: rgba(61, 242, 255, 0.35);
+}
+.bracket-box::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1.5px solid;
+  border-left: 1.5px solid;
+}
+.bracket-box::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1.5px solid;
+  border-right: 1.5px solid;
+}
+
+/* Inverse brackets helper */
+.bracket-corners {
+  position: relative;
+}
+.bracket-corners > .corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-top: 1.5px solid rgba(61, 242, 255, 0.35);
+  border-right: 1.5px solid rgba(61, 242, 255, 0.35);
+  pointer-events: none;
+}
+.bracket-corners > .corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 1.5px solid rgba(61, 242, 255, 0.35);
+  border-left: 1.5px solid rgba(61, 242, 255, 0.35);
+  pointer-events: none;
+}
+
+/* Hairline borders */
+.hairline-border {
+  border: 1px solid #1B222B;
+}
+
+/* High-tech Mono text */
+.telemetry-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Noir Easter Egg Mode */
+body.noir-mode {
+  filter: grayscale(100%) contrast(140%) brightness(88%);
+}
+body.noir-mode .grain-overlay {
+  opacity: 0.16;
+}
+body.noir-mode .scanlines-overlay {
+  opacity: 0.12;
+}
+
+/* Volumetric cursor glow */
+.cursor-cone-light {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10;
+  width: 600px;
+  height: 600px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(61, 242, 255, 0.05) 0%, rgba(61, 242, 255, 0.015) 35%, transparent 70%);
+  transition: opacity 0.3s ease;
+}
+
+/* Text reveal clip */
+.clip-text-reveal {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
