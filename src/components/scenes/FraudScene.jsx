@@ -60,7 +60,19 @@ export default function FraudScene({ isInView, onOpenIncidentReport }) {
       });
     }
 
+    let isVisible = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     const render = () => {
+      animationId = requestAnimationFrame(render);
+      if (!isVisible || document.hidden) return;
+
       ctx.clearRect(0, 0, width, height);
 
       // Grid background
@@ -173,8 +185,6 @@ export default function FraudScene({ isInView, onOpenIncidentReport }) {
         ctx.fill();
         ctx.shadowBlur = 0;
       });
-
-      animationId = requestAnimationFrame(render);
     };
 
     render();
@@ -213,6 +223,7 @@ export default function FraudScene({ isInView, onOpenIncidentReport }) {
     canvas.addEventListener('click', handleCanvasClick);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('click', handleCanvasClick);
       cancelAnimationFrame(animationId);
@@ -389,7 +400,11 @@ export default function FraudScene({ isInView, onOpenIncidentReport }) {
           <div className="w-full relative rounded bg-void/90 overflow-hidden border border-hairline/60 min-h-[360px] flex items-center justify-center cursor-crosshair">
             {activeTab === 'pipeline' && (
               <>
-                <canvas ref={canvasRef} className="w-full block" />
+                <canvas
+                  ref={canvasRef}
+                  className="w-full block cursor-pointer"
+                  style={{ touchAction: 'pan-y' }}
+                />
                 <div className="absolute bottom-2 left-3 pointer-events-none text-[9px] font-mono text-muted flex items-center gap-3">
                   <span>MODEL: XGBOOST_v2.4</span>
                   <span>ISOLATION_CONTAMINATION: 0.025</span>

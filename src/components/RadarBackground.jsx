@@ -22,6 +22,8 @@ export default function RadarBackground({ opacity = 0.35 }) {
     // Radar state
     let angle = 0;
     const speed = 0.007; // Smooth slow rotation
+    let lastTime = 0;
+    const fpsInterval = 1000 / 30; // Stable 30 FPS for ambient background radar
 
     // Ambient blips that light up when swept
     const blips = [
@@ -32,7 +34,14 @@ export default function RadarBackground({ opacity = 0.35 }) {
       { r: 0.78, a: 1.4, alpha: 0, label: 'DB-REPLICA' },
     ];
 
-    const render = () => {
+    const render = (currentTime) => {
+      animationFrameId = requestAnimationFrame(render);
+      if (document.hidden) return;
+
+      const elapsed = currentTime - lastTime;
+      if (elapsed < fpsInterval) return;
+      lastTime = currentTime - (elapsed % fpsInterval);
+
       ctx.clearRect(0, 0, width, height);
 
       const cx = width * 0.5;
@@ -130,10 +139,9 @@ export default function RadarBackground({ opacity = 0.35 }) {
       });
 
       angle = (angle + speed) % (Math.PI * 2);
-      animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    animationFrameId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener('resize', handleResize);

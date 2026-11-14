@@ -402,6 +402,15 @@ export default function WebGLHero({ scrollVelocity = 0 }) {
 
     // Tab visibility toggle
     let isTabVisible = true;
+    let isElementVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isElementVisible = entry.isIntersecting;
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(container);
+
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
     };
@@ -413,7 +422,7 @@ export default function WebGLHero({ scrollVelocity = 0 }) {
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      if (!isTabVisible) return;
+      if (!isTabVisible || !isElementVisible) return;
 
       const delta = clock.getDelta();
       const elapsedTime = clock.getElapsedTime();
@@ -479,6 +488,7 @@ export default function WebGLHero({ scrollVelocity = 0 }) {
     animate();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('click', handleClick);
       window.removeEventListener('resize', handleResize);

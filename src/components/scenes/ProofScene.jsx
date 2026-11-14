@@ -7,10 +7,10 @@ export default function ProofScene({ onOpenIncidentReport }) {
   const [selectedBlueprint, setSelectedBlueprint] = useState(null);
 
   const skills = [
-    { category: 'LANGUAGES', items: ['Python', 'Java (250+ DSA)', 'JavaScript (ES6+)', 'TypeScript', 'SQL'] },
-    { category: 'AI & REINFORCEMENT LEARNING', items: ['PyTorch', 'PPO Actor-Critic', 'CNN Vision', 'XGBoost', 'Isolation Forest', 'Grad-CAM', 'Stable-Baselines3'] },
+    { category: 'LANGUAGES', items: ['Python', 'Java (250+ DSA)', 'JavaScript (ES6+)', 'SQL'] },
+    { category: 'AI & REINFORCEMENT LEARNING', items: ['PyTorch', 'PPO Actor-Critic', 'CNN Vision', 'XGBoost', 'Isolation Forest', 'Stable-Baselines3'] },
     { category: 'BACKEND & PROTOCOLS', items: ['Node.js', 'Express.js', 'FastAPI', 'Flask', 'Socket.IO (WebSockets)', 'JWT & RBAC', 'RESTful API Design'] },
-    { category: 'DATABASES & CLOUD', items: ['MongoDB (Aggregation & Indexing)', 'PostgreSQL', 'Redis', 'Docker (Basics)', 'Git / GitHub', 'Vercel / Render'] },
+    { category: 'DATABASES & CLOUD', items: ['MongoDB (Aggregation & Indexing)', 'PostgreSQL', 'Docker (Basics)', 'Git / GitHub', 'Vercel / Render'] },
   ];
 
   return (
@@ -34,7 +34,7 @@ export default function ProofScene({ onOpenIncidentReport }) {
               Verified <span className="font-serif italic font-normal text-dawn-cream">Records</span> & Systems
             </h2>
             <p className="text-muted text-sm sm:text-base mt-2 max-w-2xl font-light">
-              Shipped production platforms, competitive engineering hackathons, 250+ algorithmic Java solutions, and academic cohort rank 1 at PREC Loni.
+              Shipped production platforms, competitive engineering hackathons, 250+ algorithmic Java solutions.
             </p>
           </div>
 

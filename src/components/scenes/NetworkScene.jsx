@@ -70,7 +70,19 @@ export default function NetworkScene({ onOpenIncidentReport }) {
       });
     }
 
+    let isVisible = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     const render = () => {
+      animationId = requestAnimationFrame(render);
+      if (!isVisible || document.hidden) return;
+
       ctx.clearRect(0, 0, width, height);
 
       // Night sky faint vertical grid
@@ -145,13 +157,12 @@ export default function NetworkScene({ onOpenIncidentReport }) {
         ctx.fill();
         ctx.shadowBlur = 0;
       });
-
-      animationId = requestAnimationFrame(render);
     };
 
     render();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationId);
     };
@@ -336,7 +347,11 @@ export default function NetworkScene({ onOpenIncidentReport }) {
 
           {/* Canvas container */}
           <div className="w-full relative rounded bg-void/90 overflow-hidden border border-hairline/60">
-            <canvas ref={canvasRef} className="w-full block" />
+            <canvas
+              ref={canvasRef}
+              className="w-full block"
+              style={{ touchAction: 'pan-y' }}
+            />
             
             {/* Overlay Caption */}
             <div className="absolute top-3 left-3 bg-panel/80 border border-hairline/60 backdrop-blur-sm px-2.5 py-1 text-[10px] font-mono text-muted rounded">

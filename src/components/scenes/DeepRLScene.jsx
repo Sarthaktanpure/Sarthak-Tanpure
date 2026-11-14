@@ -86,10 +86,22 @@ export default function DeepRLScene({ onOpenIncidentReport }) {
     };
     window.addEventListener('resize', handleResize);
 
+    let isVisible = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     let progress = 0;
     const speed = 0.0022;
 
     const render = () => {
+      animationId = requestAnimationFrame(render);
+      if (!isVisible || document.hidden) return;
+
       ctx.clearRect(0, 0, width, height);
 
       // 1. Pure dark void
@@ -258,24 +270,22 @@ export default function DeepRLScene({ onOpenIncidentReport }) {
       if (isRunning) {
         progress = (progress + speed) % 1.0;
       }
-
-      animationId = requestAnimationFrame(render);
     };
 
     render();
 
-    // Mouse Dragging Listeners on Canvas
+    // Mouse & Touch Dragging Listeners on Canvas (Mobile, Tablet, Laptop)
     let draggedIndex = -1;
 
-    const onMouseDown = (e) => {
+    const startDrag = (clientX, clientY) => {
       const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
+      const mouseX = clientX - rect.left;
+      const mouseY = clientY - rect.top;
 
       checkpointsRef.current.forEach((cp, idx) => {
         const cx = cp.x * width;
         const cy = cp.y * height;
-        if (Math.hypot(cx - mouseX, cy - mouseY) < 18) {
+        if (Math.hypot(cx - mouseX, cy - mouseY) < 22) {
           draggedIndex = idx;
           cp.isDragging = true;
           setActiveDragging(cp.label);
@@ -284,16 +294,16 @@ export default function DeepRLScene({ onOpenIncidentReport }) {
       });
     };
 
-    const onMouseMove = (e) => {
+    const moveDrag = (clientX, clientY) => {
       if (draggedIndex === -1) return;
       const rect = canvas.getBoundingClientRect();
-      const nx = Math.max(0.08, Math.min(0.92, (e.clientX - rect.left) / width));
-      const ny = Math.max(0.08, Math.min(0.92, (e.clientY - rect.top) / height));
+      const nx = Math.max(0.08, Math.min(0.92, (clientX - rect.left) / width));
+      const ny = Math.max(0.08, Math.min(0.92, (clientY - rect.top) / height));
       checkpointsRef.current[draggedIndex].x = nx;
       checkpointsRef.current[draggedIndex].y = ny;
     };
 
-    const onMouseUp = () => {
+    const endDrag = () => {
       if (draggedIndex !== -1) {
         checkpointsRef.current[draggedIndex].isDragging = false;
         draggedIndex = -1;
@@ -301,15 +311,40 @@ export default function DeepRLScene({ onOpenIncidentReport }) {
       }
     };
 
+    const onMouseDown = (e) => startDrag(e.clientX, e.clientY);
+    const onMouseMove = (e) => moveDrag(e.clientX, e.clientY);
+    const onMouseUp = () => endDrag();
+
+    const onTouchStart = (e) => {
+      if (e.touches && e.touches[0]) {
+        startDrag(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+    const onTouchMove = (e) => {
+      if (draggedIndex !== -1 && e.touches && e.touches[0]) {
+        e.preventDefault();
+        moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+    const onTouchEnd = () => endDrag();
+
     canvas.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
 
+    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd);
+
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
+      canvas.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       cancelAnimationFrame(animationId);
     };
   }, [isRunning, showRays, pilotMode, manualSteer]);
@@ -473,7 +508,11 @@ export default function DeepRLScene({ onOpenIncidentReport }) {
 
           {/* Canvas */}
           <div className="w-full relative rounded bg-void overflow-hidden border border-hairline/60 cursor-grab active:cursor-grabbing">
-            <canvas ref={canvasRef} className="w-full block" />
+            <canvas
+              ref={canvasRef}
+              className="w-full block"
+              style={{ touchAction: 'pan-y' }}
+            />
             
             {/* Live Formula Tag */}
             <div className="absolute top-3 left-3 bg-panel/90 border border-hairline/70 backdrop-blur-sm p-2 rounded text-[10px] font-mono text-muted pointer-events-none">

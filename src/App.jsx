@@ -56,35 +56,68 @@ export default function App() {
     }
   };
 
-  // Lenis smooth momentum scroll initialization
+  // Lenis smooth momentum scroll initialization (Optimized for mobile, tablet, and laptop stability)
   useEffect(() => {
+    // Detect mobile/touch devices for native, jitter-free scroll physics
+    const isTouch = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: isTouch ? 0.8 : 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.1,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      syncTouch: false,
     });
 
-    let lastScroll = 0;
+    let lastScroll = window.scrollY;
+    let rafId;
+    let isRunning = true;
+    let ticking = false;
+    let pendingProgress = 0;
+    let pendingVelocity = 0;
+    let velocityDecayTimer = null;
+
     function raf(time) {
+      if (!isRunning) return;
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
+    // Throttled scroll listener to avoid 120Hz React state churn
     lenis.on('scroll', (e) => {
+      const scrollY = typeof e.scroll === 'number' ? e.scroll : window.scrollY;
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = totalHeight > 0 ? Math.min(1, Math.max(0, e.scroll / totalHeight)) : 0;
-      setScrollProgress(progress);
+      const progress = totalHeight > 0 ? Math.min(1, Math.max(0, scrollY / totalHeight)) : 0;
+      const delta = Math.abs(scrollY - lastScroll);
+      lastScroll = scrollY;
 
-      const delta = Math.abs(e.scroll - lastScroll);
-      lastScroll = e.scroll;
-      setScrollVelocity(delta);
+      pendingProgress = progress;
+      pendingVelocity = delta;
+
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          setScrollProgress((prev) => (Math.abs(prev - pendingProgress) > 0.0015 ? pendingProgress : prev));
+          setScrollVelocity(pendingVelocity);
+          ticking = false;
+        });
+      }
+
+      // Automatically decay velocity back to 0 when user stops scrolling
+      clearTimeout(velocityDecayTimer);
+      velocityDecayTimer = setTimeout(() => {
+        setScrollVelocity(0);
+      }, 100);
     });
 
     return () => {
+      isRunning = false;
+      cancelAnimationFrame(rafId);
+      clearTimeout(velocityDecayTimer);
       lenis.destroy();
     };
   }, []);
@@ -225,14 +258,8 @@ export default function App() {
         }}
       />
 
-      {/* Main Narrative Spine (Act I -> Act V -> Sunrise) */}
-      <main
-        style={{
-          transform: scrollVelocity > 35 ? `skewY(${Math.min(2, scrollVelocity * 0.02)}deg)` : 'none',
-          transition: 'transform 0.2s cubic-bezier(0.1, 1, 0.1, 1)'
-        }}
-        className="relative z-10"
-      >
+      {/* Main Narrative Spine (Act I -> Act V -> Sunrise) - Rock-solid stability on scroll */}
+      <main className="relative z-10 w-full overflow-hidden">
         <HeroScene
           onOpenContact={scrollToContact}
           onPullLogs={() => {
