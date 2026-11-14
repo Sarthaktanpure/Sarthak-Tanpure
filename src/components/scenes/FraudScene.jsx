@@ -403,7 +403,11 @@ export default function FraudScene({ isInView, onOpenIncidentReport }) {
                 <div className="relative max-w-sm rounded overflow-hidden border border-hairline bg-void">
                   <img
                     src="/media/roc_curve.png"
-                    alt="ROC Curve (AUC = 1.00)"
+                    alt="ROC Curve for Sarthak Tanpure Financial Fraud Detection Platform (AUC 1.00)"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="300"
                     className="w-full h-auto object-contain"
                   />
                   <div className="absolute top-2 left-2 px-2 py-0.5 bg-void/90 border border-signal-cyan text-signal-cyan text-[9px] font-mono rounded">
@@ -427,7 +431,11 @@ export default function FraudScene({ isInView, onOpenIncidentReport }) {
                 <div className="relative max-w-sm rounded overflow-hidden border border-hairline bg-void">
                   <img
                     src="/media/feature_importance.png"
-                    alt="Feature Importance Analysis"
+                    alt="Feature Importance Analysis in Sarthak Tanpure XGBoost Fraud Detection System"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="300"
                     className="w-full h-auto object-contain"
                   />
                   <div className="absolute top-2 left-2 px-2 py-0.5 bg-void/90 border border-signal-cyan text-signal-cyan text-[9px] font-mono rounded">
@@ -448,7 +456,11 @@ export default function FraudScene({ isInView, onOpenIncidentReport }) {
                 <div className="relative max-w-sm rounded overflow-hidden border border-hairline bg-void">
                   <img
                     src="/media/confusion_matrix.png"
-                    alt="Confusion Matrix"
+                    alt="Confusion Matrix showing 99.98% Accuracy for Sarthak Tanpure Fraud Detection"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="300"
                     className="w-full h-auto object-contain"
                   />
                   <div className="absolute top-2 left-2 px-2 py-0.5 bg-void/90 border border-signal-cyan text-signal-cyan text-[9px] font-mono rounded">

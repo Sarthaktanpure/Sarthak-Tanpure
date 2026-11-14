@@ -1,4 +1,11 @@
+# Robots.txt for Sarthak Tanpure Developer Portfolio
+# https://sarthaktanpure-portfolio.vercel.app/
+
 User-agent: *
 Allow: /
 
+# Host
+Host: https://sarthaktanpure-portfolio.vercel.app
+
+# Sitemap
 Sitemap: https://sarthaktanpure-portfolio.vercel.app/sitemap.xml

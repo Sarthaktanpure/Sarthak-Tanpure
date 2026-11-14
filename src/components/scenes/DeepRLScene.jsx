@@ -517,7 +517,11 @@ export default function DeepRLScene({ onOpenIncidentReport }) {
             <div className="relative rounded overflow-hidden border border-hairline bg-void aspect-video flex items-center justify-center">
               <img
                 src="/media/Mountain_Track.gif"
-                alt="Mountain Track Simulation"
+                alt="Autonomous Deep RL Mountain Track Simulation by Sarthak Tanpure"
+                loading="lazy"
+                decoding="async"
+                width="480"
+                height="270"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.style.display = 'none';
