@@ -1,69 +1,16 @@
 import React, { useState } from 'react';
 import { Award, Briefcase, GraduationCap, Code2, Database, Terminal, ExternalLink, CheckCircle, ShieldCheck, Cpu, X, Server, Layers } from 'lucide-react';
+import { DATA } from '../../data/portfolioData';
 import { soundEngine } from '../../utils/soundEngine';
 
-export default function ProofScene() {
+export default function ProofScene({ onOpenIncidentReport }) {
   const [selectedBlueprint, setSelectedBlueprint] = useState(null);
-  const [dsaCategory, setDsaCategory] = useState('all');
 
   const skills = [
     { category: 'LANGUAGES', items: ['Python', 'Java (250+ DSA)', 'JavaScript (ES6+)', 'TypeScript', 'SQL'] },
     { category: 'AI & REINFORCEMENT LEARNING', items: ['PyTorch', 'PPO Actor-Critic', 'CNN Vision', 'XGBoost', 'Isolation Forest', 'Grad-CAM', 'Stable-Baselines3'] },
     { category: 'BACKEND & PROTOCOLS', items: ['Node.js', 'Express.js', 'FastAPI', 'Flask', 'Socket.IO (WebSockets)', 'JWT & RBAC', 'RESTful API Design'] },
     { category: 'DATABASES & CLOUD', items: ['MongoDB (Aggregation & Indexing)', 'PostgreSQL', 'Redis', 'Docker (Basics)', 'Git / GitHub', 'Vercel / Render'] },
-  ];
-
-  const dsaBreakdown = [
-    { topic: 'Arrays & Two Pointers', count: 72, diff: 'Medium/Hard', note: 'Sliding window, sub-array sums, binary search' },
-    { topic: 'Trees & Binary Search Trees', count: 54, diff: 'Medium', note: 'DFS, BFS traversals, lowest common ancestor, path sum' },
-    { topic: 'Dynamic Programming', count: 48, diff: 'Hard/Medium', note: '0/1 Knapsack, Longest Common Subsequence, Grid paths' },
-    { topic: 'Graphs & BFS/DFS', count: 46, diff: 'Medium/Hard', note: 'Dijkstra, Topological sort, Cycle detection, Island count' },
-    { topic: 'Linked Lists & Stacks', count: 35, diff: 'Medium', note: 'Monotonic stack, reverse k-group, LRU cache' },
-  ];
-
-  const additionalSystems = [
-    {
-      title: 'MedVision AI — Radiology Diagnostic Platform',
-      badge: 'HEALTHCARE AI',
-      tech: 'React, TypeScript, FastAPI, PyTorch, Grad-CAM, MongoDB',
-      desc: 'Production-scale radiology scan analysis combining clinical dashboard with explainable AI (Grad-CAM), delivering 50–150ms GPU inference.',
-      github: 'https://github.com/Sarthaktanpure/MedVisionAI',
-      live: 'https://med-vision-ai-green.vercel.app/',
-      blueprint: {
-        arch: 'Decoupled Client-Gateway-Inference microservice topology.',
-        db: 'MongoDB patient metadata collections indexed by scan hash.',
-        metrics: 'GPU: 50–150ms / CPU: 200–500ms latency. Heatmap overlay generated via Grad-CAM backprop gradients.',
-        security: 'HIPAA-compliant de-identification pipeline with JWT session barriers.'
-      }
-    },
-    {
-      title: 'HospitalOS — Multi-Role Healthcare Coordination',
-      badge: 'ENTERPRISE MERN',
-      tech: 'MongoDB, Express.js, React, Node.js, JWT, RBAC',
-      desc: 'Architected 30–60 REST APIs across patient, doctor, pharmacy, and admin workflows with strict role-based access control and 300+ validated tests.',
-      github: 'https://github.com/Sarthaktanpure/HospitalOS',
-      live: 'https://hospital-os-black.vercel.app/',
-      blueprint: {
-        arch: 'Role-Based Access Control (RBAC) middleware verifying token scopes before DB query dispatch.',
-        db: 'Optimized relational normalization within MongoDB with embedded sub-documents for prescription timelines.',
-        metrics: '300+ automated test suites with zero regression. Sub-50ms query latency across doctors, patients, pharmacies.',
-        security: 'Bcrypt salt rounds 12, CSRF mitigation, input validation schemas.'
-      }
-    },
-    {
-      title: 'AgriConnect — Real-Time Farmer Marketplace',
-      badge: 'REAL-TIME COMMERCE',
-      tech: 'React, Node.js, MongoDB, Socket.IO, Razorpay',
-      desc: 'Direct farmer-to-buyer marketplace with real-time bidding, chat, and order tracking with 100–300ms indexed MongoDB response times.',
-      github: 'https://github.com/Sarthaktanpure/Agriconnect',
-      live: 'https://agriconnect-ohet.vercel.app/',
-      blueprint: {
-        arch: 'Bidirectional WebSocket auction rooms paired with Razorpay webhook verification worker.',
-        db: 'Compound indexing on [cropType, geoRegion, priceRange] driving 100–300ms search latency.',
-        metrics: 'Live bid updates propagated within 35ms to all subscribed socket clients.',
-        security: 'HMAC signature verification on payment gateways; sanitized messaging channels.'
-      }
-    }
   ];
 
   return (
@@ -107,7 +54,7 @@ export default function ProofScene() {
               <span>COHORT STANDING</span>
             </div>
             <p className="text-2xl sm:text-3xl font-mono text-display mt-2">RANK 1</p>
-            <p className="text-xs text-muted font-mono mt-0.5">CGPA 8.67 / 10.0 (PREC Loni)</p>
+            <p className="text-xs text-muted font-mono mt-0.5">{DATA.education.standing}</p>
           </div>
 
           <div className="p-4 bg-panel/70 border border-hairline rounded bracket-corners">
@@ -163,7 +110,7 @@ export default function ProofScene() {
             </div>
 
             <p className="text-muted text-xs sm:text-sm mt-3 leading-relaxed">
-              Built and delivered a production commercial website for a regional solar energy enterprise. Translated business specifications into a clean, responsive customer acquisition engine with enquiry workflows and catalog showcase.
+              {DATA.client}
             </p>
 
             <div className="mt-4 pt-4 border-t border-hairline/80 flex flex-wrap gap-2 text-[10px] font-mono text-muted">
@@ -193,7 +140,7 @@ export default function ProofScene() {
             </div>
 
             <p className="text-muted text-xs sm:text-sm mt-3 leading-relaxed">
-              Architected a technology-driven AI solution for cultural heritage preservation under competitive deadlines. Advanced to Round 2 amongst nationwide engineering teams through prototype execution and architecture defense.
+              {DATA.hackathon}
             </p>
 
             <div className="mt-4 pt-4 border-t border-hairline/80 space-y-1.5 text-xs font-mono text-muted">
@@ -209,37 +156,22 @@ export default function ProofScene() {
           </div>
         </div>
 
-        {/* Row 2: Deep Technical Capability / Systems Fleet with Blueprint Inspector */}
+        {/* Row 2: Deep Technical Capability / Systems Fleet */}
         <div className="bracket-box p-6 bg-panel/80 border border-hairline rounded">
           <div className="flex items-center justify-between border-b border-hairline/80 pb-3 mb-4">
             <div className="flex items-center gap-2">
               <Cpu className="w-4 h-4 text-signal-cyan" />
               <span className="telemetry-mono text-display text-xs font-semibold">
-                SYSTEMS FLEET // CLICK TO INSPECT ARCHITECTURE BLUEPRINT
+                SYSTEMS FLEET // CONCURRENT PRODUCTION PLATFORMS
               </span>
             </div>
-            <span className="telemetry-mono text-[10px] text-muted">ALL REPOSITORIES VERIFIED</span>
+            <span className="telemetry-mono text-[10px] text-muted">ALL REPOSITORIES OPEN</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {additionalSystems.map((sys, idx) => (
-              <div
-                key={idx}
-                className="p-4 bg-void/70 border border-hairline rounded flex flex-col justify-between hover:border-signal-cyan/60 transition-all cursor-pointer group"
-                onClick={() => {
-                  soundEngine.playClick();
-                  setSelectedBlueprint(sys);
-                }}
-              >
+            {DATA.fleet.map((sys, idx) => (
+              <div key={idx} className="p-4 bg-void/70 border border-hairline rounded flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="px-2 py-0.5 bg-signal-cyan/10 border border-signal-cyan/40 text-signal-cyan font-mono text-[9px] rounded">
-                      {sys.badge}
-                    </span>
-                    <span className="text-[10px] font-mono text-muted group-hover:text-signal-cyan">
-                      INSPECT [⚙]
-                    </span>
-                  </div>
                   <h4 className="font-display font-bold text-sm text-display mb-1">{sys.title}</h4>
                   <p className="text-[11px] font-mono text-signal-cyan/80 mb-2">{sys.tech}</p>
                   <p className="text-xs text-muted leading-relaxed">{sys.desc}</p>
@@ -250,7 +182,6 @@ export default function ProofScene() {
                     href={sys.github}
                     target="_blank"
                     rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
                     className="text-muted hover:text-signal-cyan flex items-center gap-1 transition-colors"
                   >
                     <span>GITHUB</span>
@@ -261,7 +192,6 @@ export default function ProofScene() {
                       href={sys.live}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
                       className="text-signal-cyan hover:underline flex items-center gap-1"
                     >
                       <span>LIVE APP</span>
@@ -284,7 +214,7 @@ export default function ProofScene() {
               </span>
             </div>
             <a
-              href="https://leetcode.com/u/Sarthak_Tanpure_01/"
+              href={DATA.links.leetcode}
               target="_blank"
               rel="noreferrer"
               className="text-signal-amber hover:underline text-xs font-mono flex items-center gap-1"
@@ -295,12 +225,11 @@ export default function ProofScene() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            {dsaBreakdown.map((item, i) => (
+            {DATA.dsa.topics.map((item, i) => (
               <div key={i} className="p-3 bg-void/80 border border-hairline rounded flex flex-col justify-between">
                 <div>
-                  <span className="text-[10px] font-mono text-signal-amber font-semibold block">{item.diff}</span>
-                  <div className="text-display font-medium text-xs mt-1">{item.topic}</div>
-                  <p className="text-[10px] text-muted font-mono mt-1.5 leading-relaxed">{item.note}</p>
+                  <span className="text-[10px] font-mono text-signal-amber font-semibold block">TOPIC #{i + 1}</span>
+                  <div className="text-display font-medium text-xs mt-1">{item.name}</div>
                 </div>
                 <div className="mt-3 pt-2 border-t border-hairline/50 flex items-baseline justify-between">
                   <span className="text-[10px] font-mono text-muted">SOLVED:</span>
@@ -350,18 +279,15 @@ export default function ProofScene() {
 
               <div className="space-y-4 text-xs font-mono">
                 <div className="p-3 bg-void/80 border border-hairline rounded">
-                  <div className="text-display font-semibold text-sm">Pravara Rural Engineering College (PREC), Loni</div>
-                  <div className="text-signal-cyan text-[11px] mt-0.5">B.E. Information Technology (Graduating 2028)</div>
+                  <div className="text-display font-semibold text-sm">{DATA.education.college}</div>
+                  <div className="text-signal-cyan text-[11px] mt-0.5">{DATA.education.degree} (Graduating {DATA.education.expectedGraduation})</div>
                   <div className="text-muted text-[10px] mt-2 flex justify-between">
-                    <span>CGPA: 8.67 / 10.0</span>
-                    <span className="text-emerald-400 font-bold">RANK 1 IN COHORT</span>
+                    <span>{DATA.education.standing}</span>
                   </div>
                 </div>
 
                 <div className="p-3 bg-void/80 border border-hairline rounded">
-                  <div className="text-display font-medium text-xs">ASC College, Rahuri</div>
-                  <div className="text-muted text-[11px]">Higher Secondary Certificate (HSC)</div>
-                  <div className="text-muted text-[10px] mt-1">Score: 74.60%</div>
+                  <div className="text-display font-medium text-xs">{DATA.education.previous}</div>
                 </div>
 
                 <div className="p-3 bg-void/80 border border-hairline rounded">
@@ -378,76 +304,6 @@ export default function ProofScene() {
           </div>
         </div>
       </div>
-
-      {/* Blueprint Detail Modal */}
-      {selectedBlueprint && (
-        <div className="fixed inset-0 z-[10005] flex items-center justify-center p-4 bg-void/85 backdrop-blur-md">
-          <div className="bracket-box w-full max-w-2xl bg-panel border border-signal-cyan/50 rounded shadow-2xl p-6 relative">
-            <div className="flex items-center justify-between border-b border-hairline/80 pb-3 mb-4">
-              <div className="flex items-center gap-2">
-                <Server className="w-4 h-4 text-signal-cyan" />
-                <span className="telemetry-mono text-signal-cyan font-bold text-xs">
-                  ARCHITECTURE BLUEPRINT // {selectedBlueprint.badge}
-                </span>
-              </div>
-              <button
-                onClick={() => setSelectedBlueprint(null)}
-                className="p-1 text-muted hover:text-display rounded"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <h3 className="text-xl font-display font-bold text-display mb-1">{selectedBlueprint.title}</h3>
-            <p className="text-xs font-mono text-signal-cyan mb-4">{selectedBlueprint.tech}</p>
-
-            <div className="space-y-3 text-xs font-mono">
-              <div className="p-3 bg-void border border-hairline rounded">
-                <span className="text-muted text-[10px] uppercase tracking-wider block mb-1">SYSTEM TOPOLOGY</span>
-                <p className="text-display">{selectedBlueprint.blueprint.arch}</p>
-              </div>
-
-              <div className="p-3 bg-void border border-hairline rounded">
-                <span className="text-muted text-[10px] uppercase tracking-wider block mb-1">DATABASE ARCHITECTURE</span>
-                <p className="text-display">{selectedBlueprint.blueprint.db}</p>
-              </div>
-
-              <div className="p-3 bg-void border border-hairline rounded">
-                <span className="text-muted text-[10px] uppercase tracking-wider block mb-1">PERFORMANCE BENCHMARKS</span>
-                <p className="text-emerald-400 font-semibold">{selectedBlueprint.blueprint.metrics}</p>
-              </div>
-
-              <div className="p-3 bg-void border border-hairline rounded">
-                <span className="text-muted text-[10px] uppercase tracking-wider block mb-1">SECURITY BOUNDARIES</span>
-                <p className="text-display">{selectedBlueprint.blueprint.security}</p>
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-end gap-3 pt-3 border-t border-hairline">
-              <a
-                href={selectedBlueprint.github}
-                target="_blank"
-                rel="noreferrer"
-                className="px-4 py-2 bg-panel border border-hairline hover:border-signal-cyan text-display rounded text-xs font-mono flex items-center gap-1.5"
-              >
-                <span>OPEN REPOSITORY</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-              {selectedBlueprint.live && (
-                <a
-                  href={selectedBlueprint.live}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-4 py-2 bg-signal-cyan text-void font-bold rounded text-xs font-mono flex items-center gap-1.5 hover:bg-white"
-                >
-                  <span>LAUNCH LIVE APPLICATION</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

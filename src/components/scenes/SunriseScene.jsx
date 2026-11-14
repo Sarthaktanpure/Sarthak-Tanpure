@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, FileText, Mail, Phone, MapPin, Check, Copy, ArrowUpRight, Sun } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, LeetCodeIcon } from '../Icons';
+import { DATA } from '../../data/portfolioData';
 import { soundEngine } from '../../utils/soundEngine';
 
 export default function SunriseScene({ onPullLogs }) {
@@ -10,20 +11,20 @@ export default function SunriseScene({ onPullLogs }) {
   const [formState, setFormState] = useState({
     name: '',
     email: '',
-    frequency: 'Full-time / Student Researcher',
+    frequency: 'Student Researcher Role / Applied ML',
     message: ''
   });
 
   const handleCopyEmail = () => {
     soundEngine.playClick();
-    navigator.clipboard.writeText('sarthaktanpure255@gmail.com');
+    navigator.clipboard.writeText(DATA.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
   const handleCopyPhone = () => {
     soundEngine.playClick();
-    navigator.clipboard.writeText('+91 9307919092');
+    navigator.clipboard.writeText(DATA.phone);
     setCopiedPhone(true);
     setTimeout(() => setCopiedPhone(false), 2000);
   };
@@ -36,9 +37,9 @@ export default function SunriseScene({ onPullLogs }) {
   };
 
   return (
-    <footer id="contact" className="relative py-28 px-4 sm:px-8 overflow-hidden bg-gradient-to-b from-[#0E1530] via-[#3A2A5C]/40 to-[#F4D9B0]/20 text-display border-t border-hairline/80">
+    <footer id="contact" className="relative py-28 px-4 sm:px-8 overflow-hidden bg-gradient-to-b from-[#0E1530] via-[#3A2A5C]/40 to-[#F4D9B0]/25 text-display border-t border-hairline/80">
       {/* Volumetric Dawn Horizon Lighting */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[300px] bg-gradient-to-b from-dawn-coral/15 via-dawn-cream/10 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[340px] bg-gradient-to-b from-dawn-coral/15 via-dawn-cream/10 to-transparent blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Sunrise Telemetry Badge */}
@@ -51,7 +52,7 @@ export default function SunriseScene({ onPullLogs }) {
           <span className="telemetry-mono text-emerald-400">100% UPTIME PRESERVED</span>
         </div>
 
-        {/* Master Headline */}
+        {/* Master Headline with Typographic Quotes */}
         <div className="mb-14 max-w-4xl">
           <h2 className="text-5xl sm:text-7xl lg:text-8xl font-display font-extrabold tracking-tight text-display leading-[0.95]">
             Systems stayed up.<br />
@@ -67,7 +68,7 @@ export default function SunriseScene({ onPullLogs }) {
           {/* Left Column: Direct Communication Lines */}
           <div className="lg:col-span-5 space-y-6">
             <div className="bracket-box p-6 bg-panel/90 backdrop-blur-md border border-hairline rounded">
-              <span className="telemetry-mono text-[10px] text-muted block mb-4">
+              <span className="telemetry-mono text-[10px] text-muted block mb-4 font-semibold">
                 COMMUNICATION PROTOCOLS // SECURE LINES
               </span>
 
@@ -78,13 +79,16 @@ export default function SunriseScene({ onPullLogs }) {
                     <Mail className="w-4 h-4 text-signal-cyan" />
                     <div>
                       <div className="text-[10px] font-mono text-muted">PRIMARY DISPATCH</div>
-                      <div className="text-xs sm:text-sm font-mono text-display">sarthaktanpure255@gmail.com</div>
+                      <a href={DATA.links.email} className="text-xs sm:text-sm font-mono text-display hover:text-signal-cyan transition-colors">
+                        {DATA.email}
+                      </a>
                     </div>
                   </div>
                   <button
                     onClick={handleCopyEmail}
                     className="p-2 text-muted hover:text-signal-cyan transition-colors"
                     title="Copy email to clipboard"
+                    aria-label="Copy email address"
                   >
                     {copiedEmail ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                   </button>
@@ -96,13 +100,16 @@ export default function SunriseScene({ onPullLogs }) {
                     <Phone className="w-4 h-4 text-signal-amber" />
                     <div>
                       <div className="text-[10px] font-mono text-muted">DIRECT VOICE / WHATSAPP</div>
-                      <div className="text-xs sm:text-sm font-mono text-display">+91 9307919092</div>
+                      <a href={`tel:${DATA.phone}`} className="text-xs sm:text-sm font-mono text-display hover:text-signal-amber transition-colors">
+                        {DATA.phone}
+                      </a>
                     </div>
                   </div>
                   <button
                     onClick={handleCopyPhone}
                     className="p-2 text-muted hover:text-signal-amber transition-colors"
                     title="Copy phone to clipboard"
+                    aria-label="Copy phone number"
                   >
                     {copiedPhone ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                   </button>
@@ -113,16 +120,24 @@ export default function SunriseScene({ onPullLogs }) {
                   <MapPin className="w-4 h-4 text-dawn-coral" />
                   <div>
                     <div className="text-[10px] font-mono text-muted">LOCATION BASE</div>
-                    <div className="text-xs font-mono text-display">Maharashtra, India (UTC +05:30)</div>
+                    <div className="text-xs font-mono text-display">{DATA.location}</div>
                   </div>
                 </div>
               </div>
 
-              {/* Résumé CTA */}
-              <div className="mt-6 pt-4 border-t border-hairline">
+              {/* Action Buttons: Open a channel (mailto) & Pull the logs (résumé) */}
+              <div className="mt-6 pt-4 border-t border-hairline space-y-2">
+                <a
+                  href={DATA.links.email}
+                  className="w-full bracket-box py-3 bg-signal-cyan text-void text-xs font-mono font-bold tracking-widest uppercase hover:bg-white transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(61,242,255,0.25)]"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>OPEN A CHANNEL</span>
+                </a>
+
                 <button
                   onClick={onPullLogs}
-                  className="w-full bracket-box py-3 bg-signal-cyan/10 border border-signal-cyan/50 text-signal-cyan text-xs font-mono tracking-widest uppercase hover:bg-signal-cyan/20 transition-all flex items-center justify-center gap-2 group"
+                  className="w-full bracket-box py-2.5 bg-signal-cyan/10 border border-signal-cyan/50 text-signal-cyan text-xs font-mono tracking-widest uppercase hover:bg-signal-cyan/20 transition-all flex items-center justify-center gap-2 group"
                 >
                   <FileText className="w-4 h-4" />
                   <span>PULL THE LOGS (RÉSUMÉ)</span>
@@ -133,7 +148,7 @@ export default function SunriseScene({ onPullLogs }) {
             {/* Social channels */}
             <div className="flex items-center gap-3">
               <a
-                href="https://github.com/Sarthaktanpure"
+                href={DATA.links.github}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 p-3 bg-panel border border-hairline rounded flex items-center justify-between text-xs font-mono text-muted hover:border-signal-cyan hover:text-signal-cyan transition-colors"
@@ -145,7 +160,7 @@ export default function SunriseScene({ onPullLogs }) {
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </a>
               <a
-                href="https://www.linkedin.com/in/sarthak-tanpure-a74b5133a/"
+                href={DATA.links.linkedin}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 p-3 bg-panel border border-hairline rounded flex items-center justify-between text-xs font-mono text-muted hover:border-signal-cyan hover:text-signal-cyan transition-colors"
@@ -157,7 +172,7 @@ export default function SunriseScene({ onPullLogs }) {
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </a>
               <a
-                href="https://leetcode.com/u/Sarthak_Tanpure_01/"
+                href={DATA.links.leetcode}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 p-3 bg-panel border border-hairline rounded flex items-center justify-between text-xs font-mono text-muted hover:border-signal-amber hover:text-signal-amber transition-colors"
@@ -254,7 +269,7 @@ export default function SunriseScene({ onPullLogs }) {
                   className="w-full bracket-box py-3.5 bg-signal-cyan text-void font-bold text-xs font-mono tracking-widest uppercase hover:bg-white transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(61,242,255,0.25)]"
                 >
                   <Send className="w-4 h-4" />
-                  <span>TRANSMIT SIGNAL (OPEN CHANNEL)</span>
+                  <span>TRANSMIT SIGNAL</span>
                 </button>
               </form>
             )}
@@ -267,7 +282,7 @@ export default function SunriseScene({ onPullLogs }) {
             SARTHAK TANPURE • CONTROL ROOM 02:47 AM → 06:47 AM
           </div>
           <div className="text-signal-cyan/80">
-            "Systems stayed up. Let's build the next one."
+            “Systems stayed up. Let’s build the next one.”
           </div>
           <div>
             PREC LONI // IT RANK 1 // 2028

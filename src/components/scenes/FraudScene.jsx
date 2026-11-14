@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldAlert, AlertTriangle, CheckCircle2, Cpu, Activity, ArrowUpRight, BarChart3, Sliders, Layers, RefreshCw } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, CheckCircle2, Cpu, Activity, ArrowUpRight, BarChart3, Sliders, Layers, RefreshCw, FileText, Info, X } from 'lucide-react';
 import { soundEngine } from '../../utils/soundEngine';
 
-export default function FraudScene({ isInView }) {
+export default function FraudScene({ isInView, onOpenIncidentReport }) {
   const canvasRef = useRef(null);
   const [activeTab, setActiveTab] = useState('pipeline'); // 'pipeline' | 'roc' | 'features' | 'matrix'
   const [riskThreshold, setRiskThreshold] = useState(0.85);
+  const [inspectedPacket, setInspectedPacket] = useState(null);
   const [alerts, setAlerts] = useState([
     { id: 'TX-9021', time: '02:47:14', amount: '$14,250.00', risk: 0.988, flag: 'VELOCITY_SPIKE + GEO_MISMATCH', status: 'QUARANTINED' },
     { id: 'TX-8842', time: '02:46:58', amount: '$8,990.00', risk: 0.942, flag: 'ISOLATION_OUTLIER (-0.78)', status: 'INVESTIGATING' },
@@ -20,7 +21,9 @@ export default function FraudScene({ isInView }) {
     latency: '18ms'
   });
 
-  // Canvas transaction stream simulation
+  const packetsRef = useRef([]);
+
+  // Canvas transaction stream simulation with interactive packet picking
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -37,16 +40,21 @@ export default function FraudScene({ isInView }) {
     };
     window.addEventListener('resize', handleResize);
 
-    const packets = [];
-    const packetPoolSize = 38;
+    const packetPoolSize = 36;
+    packetsRef.current = [];
 
     for (let i = 0; i < packetPoolSize; i++) {
-      packets.push({
+      packetsRef.current.push({
+        id: `TX-${Math.floor(1000 + Math.random() * 9000)}`,
         x: Math.random() * width * 0.2,
         y: height * 0.5 + (Math.random() - 0.5) * 80,
-        speed: 1.6 + Math.random() * 2.2,
-        isAnomaly: Math.random() < 0.09,
-        size: 3 + Math.random() * 2,
+        speed: 1.5 + Math.random() * 2.2,
+        isAnomaly: Math.random() < 0.1,
+        amount: `$${(Math.random() * 18000 + 450).toFixed(2)}`,
+        risk: (0.1 + Math.random() * 0.89).toFixed(3),
+        velocityPercentile: Math.floor(65 + Math.random() * 34),
+        geoDistance: Math.floor(Math.random() * 9200) + ' km',
+        isolationScore: (-(0.45 + Math.random() * 0.45)).toFixed(3),
         progress: Math.random(),
         shake: 0,
       });
@@ -123,11 +131,11 @@ export default function FraudScene({ isInView }) {
       drawGate(stageApproved, stageQuarantineY, 'QUARANTINE', 'ALERT QUEUE', true);
 
       // Animate packets
-      packets.forEach((p) => {
+      packetsRef.current.forEach((p) => {
         p.progress += 0.005 * p.speed;
         if (p.progress > 1) {
           p.progress = 0;
-          p.isAnomaly = Math.random() < 0.1;
+          p.isAnomaly = Math.random() < 0.12;
           p.shake = 0;
         }
 
@@ -148,8 +156,11 @@ export default function FraudScene({ isInView }) {
           }
         }
 
+        p.currX = px;
+        p.currY = py;
+
         ctx.beginPath();
-        ctx.arc(px, py, p.isAnomaly ? 4.5 : 3, 0, Math.PI * 2);
+        ctx.arc(px, py, p.isAnomaly ? 5 : 3.5, 0, Math.PI * 2);
         if (p.isAnomaly) {
           ctx.fillStyle = '#FF3B4E';
           ctx.shadowColor = '#FF3B4E';
@@ -168,8 +179,42 @@ export default function FraudScene({ isInView }) {
 
     render();
 
+    const handleCanvasClick = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      let found = null;
+      for (const p of packetsRef.current) {
+        if (p.currX && p.currY) {
+          const dist = Math.hypot(p.currX - clickX, p.currY - clickY);
+          if (dist < 18) {
+            found = p;
+            break;
+          }
+        }
+      }
+
+      if (found) {
+        soundEngine.playClick();
+        setInspectedPacket({
+          id: found.id,
+          amount: found.amount,
+          risk: found.isAnomaly ? (0.92 + Math.random() * 0.07).toFixed(3) : found.risk,
+          isAnomaly: found.isAnomaly,
+          velocity: `${found.velocityPercentile}th percentile`,
+          geo: found.geoDistance,
+          isolationScore: found.isolationScore,
+          status: found.isAnomaly ? 'ANOMALY DETECTED → QUARANTINED' : 'VERIFIED LEGITIMATE → APPROVED',
+        });
+      }
+    };
+
+    canvas.addEventListener('click', handleCanvasClick);
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      canvas.removeEventListener('click', handleCanvasClick);
       cancelAnimationFrame(animationId);
     };
   }, [riskThreshold]);
@@ -188,7 +233,7 @@ export default function FraudScene({ isInView }) {
       time: timeStr,
       amount: randomAmount,
       risk: (0.94 + Math.random() * 0.059).toFixed(3),
-      flag: 'MANUAL_INJECTION_FLAGGED',
+      flag: 'ANOMALY DETECTED → ESCALATED → RESOLVED',
       status: 'QUARANTINED',
     };
 
@@ -222,7 +267,14 @@ export default function FraudScene({ isInView }) {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => onOpenIncidentReport('fraud-engine')}
+              className="bracket-box px-3.5 py-2.5 bg-panel border border-signal-cyan/50 text-signal-cyan text-xs font-mono tracking-widest uppercase hover:bg-signal-cyan/15 transition-all flex items-center gap-1.5"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>INCIDENT REPORT</span>
+            </button>
             <button
               onClick={handleInjectAnomaly}
               className="bracket-box px-4 py-2.5 bg-signal-alert/10 border border-signal-alert/50 text-signal-alert text-xs font-mono tracking-widest uppercase hover:bg-signal-alert/20 transition-all flex items-center gap-2 group shadow-[0_0_15px_rgba(255,59,78,0.15)]"
@@ -280,7 +332,7 @@ export default function FraudScene({ isInView }) {
             <div className="flex items-center gap-2">
               <Activity className="w-3.5 h-3.5 text-signal-cyan animate-pulse" />
               <span className="telemetry-mono text-display text-xs">
-                ANOMALY RADAR // MODEL DIAGNOSTICS DECK
+                DATASTREAM STREAMING // CLICK ANY PACKET TO INSPECT
               </span>
             </div>
 
@@ -334,14 +386,14 @@ export default function FraudScene({ isInView }) {
           </div>
 
           {/* Viewport content */}
-          <div className="w-full relative rounded bg-void/90 overflow-hidden border border-hairline/60 min-h-[360px] flex items-center justify-center">
+          <div className="w-full relative rounded bg-void/90 overflow-hidden border border-hairline/60 min-h-[360px] flex items-center justify-center cursor-crosshair">
             {activeTab === 'pipeline' && (
               <>
                 <canvas ref={canvasRef} className="w-full block" />
                 <div className="absolute bottom-2 left-3 pointer-events-none text-[9px] font-mono text-muted flex items-center gap-3">
                   <span>MODEL: XGBOOST_v2.4</span>
                   <span>ISOLATION_CONTAMINATION: 0.025</span>
-                  <span>JWT_VERIFY: OK</span>
+                  <span>CLICK PACKET: INSPECT VECTOR</span>
                 </div>
               </>
             )}
@@ -412,6 +464,34 @@ export default function FraudScene({ isInView }) {
               </div>
             )}
           </div>
+
+          {/* Interactive Clicked Packet Inspector Popup */}
+          {inspectedPacket && (
+            <div className="mt-3 p-3 bg-panel/95 border border-signal-cyan/50 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono animate-fadeIn">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${inspectedPacket.isAnomaly ? 'bg-signal-alert' : 'bg-signal-cyan'}`} />
+                  <span className="font-bold text-display">{inspectedPacket.id} ({inspectedPacket.amount})</span>
+                  <span className="text-[10px] text-muted">• RISK: {inspectedPacket.risk}</span>
+                </div>
+                <div className="text-[10px] text-muted">
+                  VELOCITY: {inspectedPacket.velocity} | GEO: {inspectedPacket.geo} | ISOLATION: {inspectedPacket.isolationScore}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className={`text-[10px] font-bold ${inspectedPacket.isAnomaly ? 'text-signal-alert' : 'text-emerald-400'}`}>
+                  {inspectedPacket.status}
+                </span>
+                <button
+                  onClick={() => setInspectedPacket(null)}
+                  className="p-1 text-muted hover:text-display rounded"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Interactive Risk Threshold Slider */}
           <div className="mt-4 p-3 bg-void/60 border border-hairline rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
@@ -506,7 +586,7 @@ export default function FraudScene({ isInView }) {
                 <span className="text-display text-[10px] truncate max-w-[160px]">{selectedAlert.flag}</span>
               </div>
               <div className="p-2 bg-void/80 rounded border border-hairline text-[10px] text-muted mt-2">
-                "ANOMALY DETECTED → ESCALATED → RESOLVED"
+                ANOMALY DETECTED → ESCALATED → RESOLVED
                 <div className="text-[9px] text-muted/60 mt-0.5">Nothing to see here. Everything is working.</div>
               </div>
             </div>

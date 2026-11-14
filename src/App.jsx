@@ -13,6 +13,9 @@ import SunriseScene from './components/scenes/SunriseScene';
 import ResumeModal from './components/ResumeModal';
 import NoirModeOverlay from './components/NoirModeOverlay';
 import OpsTerminal from './components/OpsTerminal';
+import RecruiterFastPath from './components/RecruiterFastPath';
+import IncidentReportModal from './components/IncidentReportModal';
+import { DATA } from './data/portfolioData';
 import { soundEngine } from './utils/soundEngine';
 
 export default function App() {
@@ -23,7 +26,10 @@ export default function App() {
   const [isAudioOn, setIsAudioOn] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [isFastPathOpen, setIsFastPathOpen] = useState(false);
+  const [selectedIncident, setSelectedIncident] = useState(null);
   const [is24Hour, setIs24Hour] = useState(true);
+  const [showSignalLost, setShowSignalLost] = useState(false);
 
   // Active scene calculation
   const getActiveScene = (progress) => {
@@ -135,6 +141,12 @@ export default function App() {
     if (elem) elem.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleOpenIncidentReport = (projectId) => {
+    soundEngine.playClick();
+    const proj = DATA.projects.find((p) => p.id === projectId);
+    if (proj) setSelectedIncident(proj);
+  };
+
   return (
     <div className="relative min-h-screen bg-void text-display font-display selection:bg-signal-cyan/20 selection:text-signal-cyan overflow-x-hidden">
       {/* Boot Loader */}
@@ -173,6 +185,10 @@ export default function App() {
           soundEngine.playClick();
           setIsTerminalOpen(true);
         }}
+        onOpenFastPath={() => {
+          soundEngine.playClick();
+          setIsFastPathOpen(true);
+        }}
         clockTime={clockTime}
         is24Hour={is24Hour}
         setIs24Hour={setIs24Hour}
@@ -180,6 +196,23 @@ export default function App() {
 
       {/* Noir Easter Egg Listener & Overlay */}
       <NoirModeOverlay />
+
+      {/* Recruiter Fast Path Drawer */}
+      <RecruiterFastPath
+        isOpen={isFastPathOpen}
+        onClose={() => setIsFastPathOpen(false)}
+        onPullLogs={() => {
+          setIsFastPathOpen(false);
+          setIsResumeOpen(true);
+        }}
+      />
+
+      {/* Case-Study Incident Report Overlay */}
+      <IncidentReportModal
+        project={selectedIncident}
+        isOpen={!!selectedIncident}
+        onClose={() => setSelectedIncident(null)}
+      />
 
       {/* Ops Diagnostics Command Terminal */}
       <OpsTerminal
@@ -206,15 +239,29 @@ export default function App() {
             soundEngine.playClick();
             setIsResumeOpen(true);
           }}
+          onOpenFastPath={() => {
+            soundEngine.playClick();
+            setIsFastPathOpen(true);
+          }}
+          scrollVelocity={scrollVelocity}
         />
 
-        <FraudScene isInView={activeScene.index === 2} />
+        <FraudScene
+          isInView={activeScene.index === 2}
+          onOpenIncidentReport={handleOpenIncidentReport}
+        />
 
-        <NetworkScene />
+        <NetworkScene
+          onOpenIncidentReport={handleOpenIncidentReport}
+        />
 
-        <DeepRLScene />
+        <DeepRLScene
+          onOpenIncidentReport={handleOpenIncidentReport}
+        />
 
-        <ProofScene />
+        <ProofScene
+          onOpenIncidentReport={handleOpenIncidentReport}
+        />
 
         <SunriseScene
           onPullLogs={() => {

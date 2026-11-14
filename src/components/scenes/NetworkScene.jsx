@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Users, GitFork, ArrowUpRight, Radio, Send, CheckCheck, Network } from 'lucide-react';
+import { MessageSquare, Users, GitFork, ArrowUpRight, Radio, Send, CheckCheck, Network, FileText, Zap } from 'lucide-react';
 import { soundEngine } from '../../utils/soundEngine';
 
-export default function NetworkScene() {
+export default function NetworkScene({ onOpenIncidentReport }) {
   const canvasRef = useRef(null);
   const [messages, setMessages] = useState([
     { id: 1, sender: 'alex.dev', time: '03:41 AM', text: 'Hey Sarthak, saw your PPO reinforcement learning agent.', status: 'delivered' },
@@ -18,7 +18,12 @@ export default function NetworkScene() {
     { id: 'usr-331', name: 'dev_tokyo', ping: '84ms', state: 'SYNCING' },
   ]);
 
-  // Skyline Canvas with amber lit windows and socket beams
+  const activeLinksRef = useRef([
+    { x1: 60, y1: 180, x2: 240, y2: 140, t: 0, speed: 0.01 },
+    { x1: 280, y1: 120, x2: 480, y2: 170, t: 0.4, speed: 0.008 }
+  ]);
+
+  // Skyline Canvas with amber lit windows and interactive window-linking
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -35,13 +40,13 @@ export default function NetworkScene() {
     };
     window.addEventListener('resize', handleResize);
 
-    // Generate night buildings
+    // Generate night buildings with window grids
     const buildings = [];
-    const count = Math.floor(width / 50);
+    const count = Math.floor(width / 48);
     for (let i = 0; i < count; i++) {
-      const bWidth = 35 + Math.random() * 30;
-      const bHeight = 120 + Math.random() * 160;
-      const x = i * 48;
+      const bWidth = 36 + Math.random() * 28;
+      const bHeight = 110 + Math.random() * 160;
+      const x = i * 46;
       const windows = [];
       const cols = Math.floor(bWidth / 8);
       const rows = Math.floor(bHeight / 12);
@@ -51,7 +56,7 @@ export default function NetworkScene() {
           windows.push({
             r,
             c,
-            isLit: Math.random() < 0.22,
+            isLit: Math.random() < 0.24,
             flickerTimer: Math.random() * 100,
           });
         }
@@ -65,17 +70,11 @@ export default function NetworkScene() {
       });
     }
 
-    // Floating socket packets connecting lit windows
-    const connectionArcs = [
-      { x1: width * 0.15, y1: height * 0.4, x2: width * 0.5, y2: height * 0.35, t: 0, speed: 0.008 },
-      { x1: width * 0.45, y1: height * 0.3, x2: width * 0.85, y2: height * 0.45, t: 0.5, speed: 0.006 },
-    ];
-
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
       // Night sky faint vertical grid
-      ctx.strokeStyle = 'rgba(255, 179, 71, 0.03)';
+      ctx.strokeStyle = 'rgba(255, 179, 71, 0.035)';
       ctx.lineWidth = 1;
       for (let gx = 0; gx < width; gx += 40) {
         ctx.beginPath();
@@ -87,13 +86,11 @@ export default function NetworkScene() {
       // Draw buildings and lit windows
       buildings.forEach((b) => {
         const bY = height - b.h;
-        // Building silhouette
         ctx.fillStyle = '#080C11';
         ctx.fillRect(b.x, bY, b.w, b.h);
         ctx.strokeStyle = '#141B23';
         ctx.strokeRect(b.x, bY, b.w, b.h);
 
-        // Windows
         b.windows.forEach((win) => {
           const wx = b.x + 4 + win.c * 7;
           const wy = bY + 8 + win.r * 11;
@@ -102,11 +99,11 @@ export default function NetworkScene() {
           win.flickerTimer += 0.05;
           if (win.flickerTimer > 200) {
             win.flickerTimer = 0;
-            if (Math.random() < 0.1) win.isLit = !win.isLit;
+            if (Math.random() < 0.08) win.isLit = !win.isLit;
           }
 
           if (win.isLit) {
-            ctx.fillStyle = 'rgba(255, 179, 71, 0.85)';
+            ctx.fillStyle = 'rgba(255, 179, 71, 0.9)';
             ctx.shadowColor = '#FFB347';
             ctx.shadowBlur = 4;
             ctx.fillRect(wx, wy, 4, 6);
@@ -118,24 +115,24 @@ export default function NetworkScene() {
         });
       });
 
-      // Draw connection lines between skyline nodes
-      connectionArcs.forEach((arc) => {
+      // Draw dynamic lines of light connecting two windows across the skyline
+      activeLinksRef.current.forEach((arc) => {
         arc.t += arc.speed;
         if (arc.t > 1) arc.t = 0;
 
-        // Curved arc
-        ctx.strokeStyle = 'rgba(255, 179, 71, 0.25)';
+        // Curved arc of light
+        ctx.strokeStyle = 'rgba(255, 179, 71, 0.4)';
         ctx.lineWidth = 1.5;
-        ctx.setLineDash([3, 5]);
+        ctx.setLineDash([4, 4]);
         ctx.beginPath();
         ctx.moveTo(arc.x1, arc.y1);
         const midX = (arc.x1 + arc.x2) / 2;
-        const midY = Math.min(arc.y1, arc.y2) - 40;
+        const midY = Math.min(arc.y1, arc.y2) - 45;
         ctx.quadraticCurveTo(midX, midY, arc.x2, arc.y2);
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Animated amber packet along bezier
+        // Animated amber packet along the beam
         const t = arc.t;
         const px = (1 - t) * (1 - t) * arc.x1 + 2 * (1 - t) * t * midX + t * t * arc.x2;
         const py = (1 - t) * (1 - t) * arc.y1 + 2 * (1 - t) * t * midY + t * t * arc.y2;
@@ -160,6 +157,42 @@ export default function NetworkScene() {
     };
   }, []);
 
+  const handleLinkWindows = () => {
+    soundEngine.playClick();
+    setActiveConnections((prev) => prev + 1);
+
+    const canvas = canvasRef.current;
+    const w = canvas ? canvas.width : 600;
+    const h = canvas ? canvas.height : 300;
+
+    const x1 = Math.random() * (w * 0.4) + 20;
+    const y1 = Math.random() * (h * 0.5) + 120;
+    const x2 = Math.random() * (w * 0.4) + w * 0.5;
+    const y2 = Math.random() * (h * 0.5) + 120;
+
+    activeLinksRef.current.push({
+      x1,
+      y1,
+      x2,
+      y2,
+      t: 0,
+      speed: 0.012 + Math.random() * 0.008,
+    });
+
+    if (activeLinksRef.current.length > 5) {
+      activeLinksRef.current.shift();
+    }
+
+    const cities = ['dev_sf', 'dev_tokyo', 'dev_seoul', 'dev_london', 'dev_zurich'];
+    const randomCity = cities[Math.floor(Math.random() * cities.length)];
+    const randomPing = `${Math.floor(Math.random() * 60 + 15)}ms`;
+
+    setConnectedNodes((prev) => [
+      { id: `usr-${Math.floor(Math.random() * 900 + 100)}`, name: randomCity, ping: randomPing, state: 'LINKED' },
+      ...prev.slice(0, 2),
+    ]);
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!inputVal.trim()) return;
@@ -182,7 +215,7 @@ export default function NetworkScene() {
         prev.map((m) => (m.id === newMsg.id ? { ...m, status: 'read' } : m))
       );
 
-      // Automated intelligent peer response from Sarthak's ops mesh
+      // Automated peer response from Sarthak's ops mesh
       setTimeout(() => {
         soundEngine.playClick();
         let reply = "Socket packet received on port 8080. Latency 14ms.";
@@ -190,7 +223,7 @@ export default function NetworkScene() {
         if (low.includes('fraud') || low.includes('xgboost') || low.includes('anomaly')) {
           reply = "The fraud engine handles 20k+ records with XGBoost + Isolation Forest. Check Act II above!";
         } else if (low.includes('rl') || low.includes('car') || low.includes('ppo') || low.includes('track')) {
-          reply = "The PPO driving agent converges in 500k steps with CNN vision. Try taking manual wheel in Act IV!";
+          reply = "The PPO driving agent converges in 500k steps with CNN vision. Try dragging track checkpoints in Act IV!";
         } else if (low.includes('hire') || low.includes('collab') || low.includes('role') || low.includes('contact')) {
           reply = "Sarthak is open for Student Researcher & ML engineering roles! Reach out at sarthaktanpure255@gmail.com";
         } else {
@@ -209,19 +242,6 @@ export default function NetworkScene() {
         ]);
       }, 1000);
     }, 500);
-  };
-
-  const handleLinkNode = () => {
-    soundEngine.playClick();
-    setActiveConnections((prev) => prev + 1);
-    const cities = ['dev_seoul', 'dev_sf', 'dev_london', 'dev_toronto', 'dev_paris'];
-    const randomCity = cities[Math.floor(Math.random() * cities.length)];
-    const randomPing = `${Math.floor(Math.random() * 80 + 20)}ms`;
-
-    setConnectedNodes((prev) => [
-      { id: `usr-${Math.floor(Math.random() * 900 + 100)}`, name: randomCity, ping: randomPing, state: 'LINKED' },
-      ...prev.slice(0, 2),
-    ]);
   };
 
   return (
@@ -246,13 +266,20 @@ export default function NetworkScene() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <button
-              onClick={handleLinkNode}
+              onClick={() => onOpenIncidentReport('developer-mesh')}
+              className="bracket-box px-3.5 py-2.5 bg-panel border border-signal-amber/50 text-signal-amber text-xs font-mono tracking-widest uppercase hover:bg-signal-amber/15 transition-all flex items-center gap-1.5"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>INCIDENT REPORT</span>
+            </button>
+            <button
+              onClick={handleLinkWindows}
               className="bracket-box px-4 py-2.5 bg-signal-amber/10 border border-signal-amber/50 text-signal-amber text-xs font-mono tracking-widest uppercase hover:bg-signal-amber/20 transition-all flex items-center gap-2 group shadow-[0_0_15px_rgba(255,179,71,0.15)]"
             >
-              <Network className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
-              <span>LINK SKYLINE NODE</span>
+              <Zap className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+              <span>LINK TWO WINDOWS WITH LIGHT</span>
             </button>
             <a
               href="https://github.com/Sarthaktanpure/Developer-Networking-Platform"
@@ -299,11 +326,11 @@ export default function NetworkScene() {
             <div className="flex items-center gap-2">
               <Radio className="w-3.5 h-3.5 text-signal-amber animate-pulse" />
               <span className="telemetry-mono text-display text-xs">
-                NIGHT SKYLINE // ACTIVE AMBER WINDOWS (03:47 AM)
+                NIGHT SKYLINE // AMBER WINDOWS LINKING (03:47 AM)
               </span>
             </div>
             <span className="telemetry-mono text-[10px] text-signal-amber">
-              SOCKET.IO CHANNELS
+              SOCKET.IO EVENT BUS
             </span>
           </div>
 
@@ -313,7 +340,7 @@ export default function NetworkScene() {
             
             {/* Overlay Caption */}
             <div className="absolute top-3 left-3 bg-panel/80 border border-hairline/60 backdrop-blur-sm px-2.5 py-1 text-[10px] font-mono text-muted rounded">
-              "Messages glowing like lit windows in a night skyline."
+              Two windows link with a line of light across the night skyline.
             </div>
           </div>
 

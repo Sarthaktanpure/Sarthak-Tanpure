@@ -1,9 +1,10 @@
 import React from 'react';
-import { ArrowDown, FileText, Send, Terminal, Shield, Cpu, Activity, ExternalLink } from 'lucide-react';
+import { ArrowDown, FileText, Send, Terminal, Shield, Cpu, Activity, ExternalLink, Zap } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, LeetCodeIcon } from '../Icons';
+import WebGLHero from '../WebGLHero';
 import { soundEngine } from '../../utils/soundEngine';
 
-export default function HeroScene({ onOpenContact, onPullLogs }) {
+export default function HeroScene({ onOpenContact, onPullLogs, onOpenFastPath, scrollVelocity = 0 }) {
   const scrollToAct2 = () => {
     soundEngine.playClick();
     const elem = document.getElementById('act-2');
@@ -12,8 +13,11 @@ export default function HeroScene({ onOpenContact, onPullLogs }) {
 
   return (
     <section id="act-1" className="relative min-h-screen flex flex-col justify-between pt-28 pb-16 px-4 sm:px-8 border-b border-hairline/80 bg-void overflow-hidden">
+      {/* Three.js 3D WebGL Background: Volumetric light cone, depth fog, 3D radar sweep */}
+      <WebGLHero scrollVelocity={scrollVelocity} />
+
       {/* Top micro-telemetry metadata */}
-      <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline/80 pb-4 text-xs">
+      <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline/80 pb-4 text-xs relative z-10">
         <div className="flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-signal-cyan animate-ping" />
           <span className="telemetry-mono text-signal-cyan font-medium">
@@ -33,21 +37,22 @@ export default function HeroScene({ onOpenContact, onPullLogs }) {
       </div>
 
       {/* Centerpiece Hero Statement */}
-      <div className="max-w-7xl mx-auto w-full my-auto py-12">
+      <div className="max-w-7xl mx-auto w-full my-auto py-12 relative z-10">
         <div className="space-y-4">
-          <div className="inline-block px-3 py-1 rounded bg-panel border border-hairline text-[11px] font-mono tracking-widest text-signal-cyan/90 uppercase">
-            OPERATIONS DESK // 02:47 AM
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-panel/80 border border-hairline text-[11px] font-mono tracking-widest text-signal-cyan/90 uppercase backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-signal-cyan" />
+            <span>OPERATIONS DESK // 02:47 AM</span>
           </div>
 
-          {/* Massive Name Typography */}
-          <h1 className="text-[14vw] sm:text-[11vw] font-display font-extrabold tracking-tighter leading-[0.88] text-display uppercase select-none">
+          {/* Huge Name Typography with Light-Reveal Feel */}
+          <h1 className="text-[14vw] sm:text-[11vw] font-display font-extrabold tracking-tighter leading-[0.88] text-display uppercase select-none transition-colors duration-300">
             SARTHAK<br />
             <span className="text-muted/80 hover:text-signal-cyan transition-colors duration-500">
               TANPURE
             </span>
           </h1>
 
-          {/* Emotional Manifesto Line */}
+          {/* Emotional Manifesto Line with Typographic Punctuation */}
           <div className="max-w-3xl pt-2">
             <p className="text-2xl sm:text-4xl md:text-5xl font-display font-light text-display tracking-tight leading-snug">
               I build things that <span className="font-serif italic font-normal text-signal-cyan">keep running in the dark</span>.
@@ -73,6 +78,15 @@ export default function HeroScene({ onOpenContact, onPullLogs }) {
             >
               <FileText className="w-4 h-4 text-signal-cyan" />
               <span>PULL THE LOGS (RÉSUMÉ)</span>
+            </button>
+
+            <button
+              onClick={onOpenFastPath}
+              className="bracket-box px-4 py-3.5 bg-panel/80 border border-signal-amber/40 text-signal-amber text-xs font-mono tracking-widest uppercase hover:bg-signal-amber/10 transition-all flex items-center gap-2"
+              title="Fast dossier for recruiters (< 30s read)"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>SKIP TO THE LOGS</span>
             </button>
 
             {/* Quick Profile Links */}
@@ -111,7 +125,7 @@ export default function HeroScene({ onOpenContact, onPullLogs }) {
       </div>
 
       {/* Bottom Telemetry & Scroll Anchor */}
-      <div className="max-w-7xl mx-auto w-full pt-8 border-t border-hairline/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto w-full pt-8 border-t border-hairline/80 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
         {/* Core Metrics Preview */}
         <div className="grid grid-cols-3 gap-6 sm:gap-12 w-full sm:w-auto">
           <div>
