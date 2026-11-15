@@ -7,53 +7,50 @@ export default {
   theme: {
     extend: {
       colors: {
-        void: "#05070A",
-        panel: {
-          DEFAULT: "#0B0F14",
-          subtle: "#0e1319",
-          card: "rgba(11, 15, 20, 0.75)",
+        // Cobalt Swiss Poster Palette
+        cobalt: {
+          blue: "#1B2BFF",     // Electric Cobalt background
+          paper: "#F3F1EA",    // Poster Paper
+          ink: "#0A0E3A",      // Deep Contrast Ink
+          red: "#FF4A1C",      // Geometric Red Accent
+          yellow: "#FFD400",   // Half-Moon Yellow Accent
         },
-        hairline: {
-          DEFAULT: "#1B222B",
-          subtle: "rgba(27, 34, 43, 0.6)",
-          bright: "#2A3644",
+        // Backward-compatibility aliases
+        blue: {
+          cobalt: "#1B2BFF",
         },
-        display: "#EDEBE4",
+        paper: "#F3F1EA",
+        ink: "#0A0E3A",
+        // Legacy colors kept for safe fallback
+        void: "#1B2BFF",
+        display: "#F3F1EA",
         muted: "#7C8794",
-        signal: {
-          cyan: "#3DF2FF",
-          alert: "#FF3B4E",
-          amber: "#FFB347",
-        },
-        dawn: {
-          deep: "#0E1530",
-          violet: "#3A2A5C",
-          coral: "#C97B5A",
-          cream: "#F4D9B0",
-        }
       },
       fontFamily: {
-        display: ['"Space Grotesk"', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        display: ['"Archivo"', 'sans-serif'],
+        sans: ['"Archivo"', 'sans-serif'],
+        mono: ['"DM Mono"', 'ui-monospace', 'monospace'],
+      },
+      borderRadius: {
+        sheet: '44px',
       },
       letterSpacing: {
+        poster: '-0.04em',
+        'poster-tight': '-0.06em',
         widest: '0.15em',
-        ultra: '0.25em',
+      },
+      borderWidth: {
+        '2': '2px',
       },
       animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'sweep': 'sweep 8s linear infinite',
-        'scanline': 'scanline 10s linear infinite',
+        'spin-slow': 'spin 18s linear infinite',
+        'spin-reverse': 'spin-rev 22s linear infinite',
+        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
-        sweep: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
-        },
-        scanline: {
-          '0%': { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(1000%)' },
+        'spin-rev': {
+          '0%': { transform: 'rotate(360deg)' },
+          '100%': { transform: 'rotate(0deg)' },
         }
       }
     },

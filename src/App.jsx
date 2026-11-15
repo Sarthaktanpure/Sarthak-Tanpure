@@ -1,68 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import Loader from './components/Loader';
-import TelemetryHUD from './components/TelemetryHUD';
-import CursorAndLight from './components/CursorAndLight';
-import RadarBackground from './components/RadarBackground';
-import HeroScene from './components/scenes/HeroScene';
-import FraudScene from './components/scenes/FraudScene';
-import NetworkScene from './components/scenes/NetworkScene';
-import DeepRLScene from './components/scenes/DeepRLScene';
-import ProofScene from './components/scenes/ProofScene';
-import SunriseScene from './components/scenes/SunriseScene';
+import Loader from './components/cobalt/Loader';
+import Nav from './components/cobalt/Nav';
+import Hero from './components/cobalt/Hero';
+import About from './components/cobalt/About';
+import Work from './components/cobalt/Work';
+import Craft from './components/cobalt/Craft';
+import Notes from './components/cobalt/Notes';
+import Contact from './components/cobalt/Contact';
+import Cursor from './components/cobalt/Cursor';
+import ShapeFX from './components/cobalt/ShapeFX';
 import ResumeModal from './components/ResumeModal';
-import NoirModeOverlay from './components/NoirModeOverlay';
-import OpsTerminal from './components/OpsTerminal';
-import RecruiterFastPath from './components/RecruiterFastPath';
-import IncidentReportModal from './components/IncidentReportModal';
-import { DATA } from './data/portfolioData';
-import { soundEngine } from './utils/soundEngine';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollVelocity, setScrollVelocity] = useState(0);
-  const [cursorCoords, setCursorCoords] = useState({ x: 0, y: 0 });
-  const [isAudioOn, setIsAudioOn] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
-  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const [isFastPathOpen, setIsFastPathOpen] = useState(false);
-  const [selectedIncident, setSelectedIncident] = useState(null);
-  const [is24Hour, setIs24Hour] = useState(true);
-  const [showSignalLost, setShowSignalLost] = useState(false);
+  const shapeFXRef = useRef(null);
 
-  // Active scene calculation
-  const getActiveScene = (progress) => {
-    if (progress < 0.18) return { index: 1, title: 'BOOT' };
-    if (progress < 0.40) return { index: 2, title: 'THE WATCH' };
-    if (progress < 0.62) return { index: 3, title: 'THE CONNECTION' };
-    if (progress < 0.82) return { index: 4, title: 'THE MACHINE THINKS' };
-    if (progress < 0.94) return { index: 5, title: 'PROOF' };
-    return { index: 5, title: 'SUNRISE' };
-  };
-
-  // Convert scroll progress (0.0 to 1.0) into continuous Night Shift time: 00:00 -> 06:47
-  const getClockTime = (progress, is24) => {
-    const totalMinutes = Math.min(407, Math.floor(progress * 407));
-    const hours24 = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    const minStr = String(minutes).padStart(2, '0');
-
-    if (is24) {
-      return `${String(hours24).padStart(2, '0')}:${minStr}`;
-    } else {
-      const displayHours = hours24 % 12 || 12;
-      return `${String(displayHours).padStart(2, '0')}:${minStr} AM`;
-    }
-  };
-
-  // Lenis smooth momentum scroll initialization (Optimized for mobile, tablet, and laptop stability)
+  // Lenis smooth momentum scroll initialization
   useEffect(() => {
-    // Detect mobile/touch devices for native, jitter-free scroll physics
     const isTouch = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
 
     const lenis = new Lenis({
-      duration: isTouch ? 0.8 : 1.1,
+      duration: isTouch ? 0.75 : 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
@@ -78,7 +40,7 @@ export default function App() {
     let ticking = false;
     let pendingProgress = 0;
     let pendingVelocity = 0;
-    let velocityDecayTimer = null;
+    let velocityTimer = null;
 
     function raf(time) {
       if (!isRunning) return;
@@ -87,7 +49,6 @@ export default function App() {
     }
     rafId = requestAnimationFrame(raf);
 
-    // Throttled scroll listener to avoid 120Hz React state churn
     lenis.on('scroll', (e) => {
       const scrollY = typeof e.scroll === 'number' ? e.scroll : window.scrollY;
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -101,210 +62,80 @@ export default function App() {
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(() => {
-          setScrollProgress((prev) => (Math.abs(prev - pendingProgress) > 0.0015 ? pendingProgress : prev));
+          setScrollProgress(pendingProgress);
           setScrollVelocity(pendingVelocity);
           ticking = false;
         });
       }
 
-      // Automatically decay velocity back to 0 when user stops scrolling
-      clearTimeout(velocityDecayTimer);
-      velocityDecayTimer = setTimeout(() => {
+      if (velocityTimer) clearTimeout(velocityTimer);
+      velocityTimer = setTimeout(() => {
         setScrollVelocity(0);
-      }, 100);
+      }, 120);
     });
 
     return () => {
       isRunning = false;
       cancelAnimationFrame(rafId);
-      clearTimeout(velocityDecayTimer);
+      if (velocityTimer) clearTimeout(velocityTimer);
       lenis.destroy();
     };
   }, []);
 
-  // Keyboard shortcut listener for terminal ~ (backquote)
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === '`' || e.key === '~') {
-        e.preventDefault();
-        soundEngine.playClick();
-        setIsTerminalOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  // Cursor coordinates
-  useEffect(() => {
-    const handleMouse = (e) => {
-      setCursorCoords({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouse);
-    return () => window.removeEventListener('mousemove', handleMouse);
-  }, []);
-
-  const activeScene = getActiveScene(scrollProgress);
-  const clockTime = getClockTime(scrollProgress, is24Hour);
-
-  const getAtmosphereStyle = () => {
-    if (scrollProgress > 0.85) {
-      return {
-        background: 'radial-gradient(circle at 50% 100%, rgba(201, 123, 90, 0.08) 0%, transparent 60%)',
-      };
-    }
-    if (scrollProgress > 0.45 && scrollProgress <= 0.65) {
-      return {
-        background: 'radial-gradient(circle at 80% 50%, rgba(255, 179, 71, 0.04) 0%, transparent 70%)',
-      };
-    }
-    if (scrollProgress > 0.20 && scrollProgress <= 0.45) {
-      return {
-        background: 'radial-gradient(circle at 20% 40%, rgba(255, 59, 78, 0.035) 0%, transparent 70%)',
-      };
-    }
-    return {
-      background: 'radial-gradient(circle at 50% 30%, rgba(61, 242, 255, 0.03) 0%, transparent 70%)',
-    };
-  };
-
-  const scrollToContact = () => {
-    soundEngine.playClick();
-    const elem = document.getElementById('contact');
-    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleOpenIncidentReport = (projectId) => {
-    soundEngine.playClick();
-    const proj = DATA.projects.find((p) => p.id === projectId);
-    if (proj) setSelectedIncident(proj);
-  };
-
   return (
-    <div className="relative min-h-screen bg-void text-display font-display selection:bg-signal-cyan/20 selection:text-signal-cyan overflow-x-hidden">
-      {/* Boot Loader */}
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+    <div className="relative min-h-screen bg-cobalt-blue text-cobalt-paper font-sans selection:bg-cobalt-yellow selection:text-cobalt-ink overflow-x-hidden antialiased">
+      {/* 1. Full-Screen Ink Curtain Loader with Center Confetti Burst */}
+      {loading && (
+        <Loader
+          onComplete={() => setLoading(false)}
+          onBurst={(x, y, count) => shapeFXRef.current?.burst(x, y, count)}
+        />
+      )}
 
-      {/* Atmospheric Overlays */}
-      <div className="grain-overlay" />
-      <div className="scanlines-overlay" />
-      <div className="vignette-overlay" />
+      {/* 2. Paper Grain Overlay (7% multiply blend across whole page) */}
+      <div className="paper-grain-overlay" aria-hidden="true" />
 
-      {/* Dynamic Background Atmosphere */}
-      <div
-        className="fixed inset-0 pointer-events-none transition-all duration-1000 z-0"
-        style={getAtmosphereStyle()}
-      />
+      {/* 3. Interactive Physics Shape Burst & Trail Canvas */}
+      <ShapeFX ref={shapeFXRef} />
 
-      {/* Radar Background Sweep */}
-      <RadarBackground opacity={scrollProgress < 0.25 ? 0.35 : 0.12} />
+      {/* 4. Minimal Difference Cursor (Fine Pointers) */}
+      <Cursor />
 
-      {/* Precision Cursor & Desk Lamp Glow */}
-      <CursorAndLight />
+      {/* 5. Minimal Swiss Navigation */}
+      <Nav onOpenResume={() => setIsResumeOpen(true)} />
 
-      {/* Fixed Telemetry HUD */}
-      <TelemetryHUD
-        scrollProgress={scrollProgress}
-        activeScene={activeScene}
-        cursorCoords={cursorCoords}
-        isAudioOn={isAudioOn}
-        setIsAudioOn={setIsAudioOn}
-        onOpenContact={scrollToContact}
-        onPullLogs={() => {
-          soundEngine.playClick();
-          setIsResumeOpen(true);
+      {/* 6. Main Content Spine with Headline Skew on Velocity */}
+      <main
+        className="relative z-10 w-full overflow-hidden"
+        style={{
+          // Subtle headline skew on fast scroll velocity (max 2deg)
+          transform: scrollVelocity > 40 ? `skewY(${Math.min(2, (scrollVelocity - 40) * 0.03)}deg)` : 'none',
+          transition: 'transform 0.15s ease-out',
         }}
-        onOpenTerminal={() => {
-          soundEngine.playClick();
-          setIsTerminalOpen(true);
-        }}
-        onOpenFastPath={() => {
-          soundEngine.playClick();
-          setIsFastPathOpen(true);
-        }}
-        clockTime={clockTime}
-        is24Hour={is24Hour}
-        setIs24Hour={setIs24Hour}
-      />
+      >
+        {/* Section 01: Hero (Sticky sheet with letter stretch and background shapes) */}
+        <Hero scrollVelocity={scrollVelocity} scrollProgress={scrollProgress} />
 
-      {/* Noir Easter Egg Listener & Overlay */}
-      <NoirModeOverlay />
+        {/* Section 02: About (Sliding Paper Sheet with word darkening) */}
+        <About scrollProgress={scrollProgress} />
 
-      {/* Recruiter Fast Path Drawer */}
-      <RecruiterFastPath
-        isOpen={isFastPathOpen}
-        onClose={() => setIsFastPathOpen(false)}
-        onPullLogs={() => {
-          setIsFastPathOpen(false);
-          setIsResumeOpen(true);
-        }}
-      />
+        {/* Section 03: Selected Work (Paper with Red Band Header & Accordion) */}
+        <Work />
 
-      {/* Case-Study Incident Report Overlay */}
-      <IncidentReportModal
-        project={selectedIncident}
-        isOpen={!!selectedIncident}
-        onClose={() => setSelectedIncident(null)}
-      />
+        {/* Section 04: Craft (Crossing Tilted Marquee Bands with Velocity Acceleration) */}
+        <Craft scrollVelocity={scrollVelocity} />
 
-      {/* Ops Diagnostics Command Terminal */}
-      <OpsTerminal
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-        onOpenContact={scrollToContact}
-        onPullLogs={() => {
-          setIsTerminalOpen(false);
-          setIsResumeOpen(true);
-        }}
-      />
+        {/* Section 05: Notes (Ruled Citations with Animated Line Reveal) */}
+        <Notes />
 
-      {/* Main Narrative Spine (Act I -> Act V -> Sunrise) - Rock-solid stability on scroll */}
-      <main className="relative z-10 w-full overflow-hidden">
-        <HeroScene
-          onOpenContact={scrollToContact}
-          onPullLogs={() => {
-            soundEngine.playClick();
-            setIsResumeOpen(true);
-          }}
-          onOpenFastPath={() => {
-            soundEngine.playClick();
-            setIsFastPathOpen(true);
-          }}
-          scrollVelocity={scrollVelocity}
-        />
-
-        <FraudScene
-          isInView={activeScene.index === 2}
-          onOpenIncidentReport={handleOpenIncidentReport}
-        />
-
-        <NetworkScene
-          onOpenIncidentReport={handleOpenIncidentReport}
-        />
-
-        <DeepRLScene
-          onOpenIncidentReport={handleOpenIncidentReport}
-        />
-
-        <ProofScene
-          onOpenIncidentReport={handleOpenIncidentReport}
-        />
-
-        <SunriseScene
-          onPullLogs={() => {
-            soundEngine.playClick();
-            setIsResumeOpen(true);
-          }}
-        />
+        {/* Section 06: Contact & Footer */}
+        <Contact />
       </main>
 
-      {/* Resume Logs Modal */}
+      {/* Résumé Modal Dialog */}
       <ResumeModal
         isOpen={isResumeOpen}
-        onClose={() => {
-          soundEngine.playClick();
-          setIsResumeOpen(false);
-        }}
+        onClose={() => setIsResumeOpen(false)}
       />
     </div>
   );
