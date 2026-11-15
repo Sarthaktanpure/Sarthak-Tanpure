@@ -25,13 +25,27 @@ const ShapeFX = forwardRef<ShapeFXHandle>((_, ref) => {
   const isLoopRunningRef = useRef(false);
   const trailThrottleRef = useRef(0);
 
-  const colors = ['#FF4A1C', '#FFD400', '#F3F1EA', '#0A0E3A'];
+  // Dynamically resolve theme colors from CSS variables at runtime
+  const getThemeColors = (): string[] => {
+    if (typeof window === 'undefined') return [];
+    const styles = getComputedStyle(document.documentElement);
+    const a1 = styles.getPropertyValue('--accent-1').trim();
+    const a2 = styles.getPropertyValue('--accent-2').trim();
+    const paper = styles.getPropertyValue('--paper').trim();
+    const ink = styles.getPropertyValue('--ink').trim();
+    const primary = styles.getPropertyValue('--primary').trim();
+    const resolved = [a1, a2, paper, ink, primary].filter(Boolean);
+    return resolved.length > 0 ? resolved : ['currentColor'];
+  };
+
   const shapes: ('circle' | 'square' | 'triangle')[] = ['circle', 'square', 'triangle'];
 
   const spawnBurst = (clickX: number, clickY: number, count = 26) => {
+    const themeColors = getThemeColors();
+
     for (let i = 0; i < count; i++) {
       const shape = shapes[Math.floor(Math.random() * shapes.length)];
-      const color = colors[Math.floor(Math.random() * colors.length)];
+      const color = themeColors[Math.floor(Math.random() * themeColors.length)];
       const angle = Math.random() * Math.PI * 2;
       const speed = Math.random() * 14 + 4;
 
@@ -173,8 +187,9 @@ const ShapeFX = forwardRef<ShapeFXHandle>((_, ref) => {
       if (now - trailThrottleRef.current < 45) return;
       trailThrottleRef.current = now;
 
+      const themeColors = getThemeColors();
       const shape = shapes[Math.floor(Math.random() * shapes.length)];
-      const color = colors[Math.floor(Math.random() * colors.length)];
+      const color = themeColors[Math.floor(Math.random() * themeColors.length)];
 
       particlesRef.current.push({
         x: e.clientX,

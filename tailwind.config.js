@@ -7,24 +7,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Cobalt Swiss Poster Palette
-        cobalt: {
-          blue: "#1B2BFF",     // Electric Cobalt background
-          paper: "#F3F1EA",    // Poster Paper
-          ink: "#0A0E3A",      // Deep Contrast Ink
-          red: "#FF4A1C",      // Geometric Red Accent
-          yellow: "#FFD400",   // Half-Moon Yellow Accent
-        },
-        // Backward-compatibility aliases
-        blue: {
-          cobalt: "#1B2BFF",
-        },
-        paper: "#F3F1EA",
-        ink: "#0A0E3A",
-        // Legacy colors kept for safe fallback
-        void: "#1B2BFF",
-        display: "#F3F1EA",
-        muted: "#7C8794",
+        primary: 'var(--primary)',
+        paper: 'var(--paper)',
+        ink: 'var(--ink)',
+        'accent-1': 'var(--accent-1)',
+        'accent-2': 'var(--accent-2)',
+        accent1: 'var(--accent-1)',
+        accent2: 'var(--accent-2)',
       },
       fontFamily: {
         display: ['"Archivo"', 'sans-serif'],

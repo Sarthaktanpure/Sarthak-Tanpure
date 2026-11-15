@@ -13,7 +13,12 @@ import ShapeFX from './components/cobalt/ShapeFX';
 import ResumeModal from './components/ResumeModal';
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.search.includes('skipLoader')) {
+      return false;
+    }
+    return true;
+  });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
@@ -49,6 +54,14 @@ export default function App() {
     }
     rafId = requestAnimationFrame(raf);
 
+    const params = new URLSearchParams(window.location.search);
+    const targetSection = params.get('section');
+    if (targetSection) {
+      setTimeout(() => {
+        lenis.scrollTo(`#${targetSection}`, { immediate: true });
+      }, 150);
+    }
+
     lenis.on('scroll', (e) => {
       const scrollY = typeof e.scroll === 'number' ? e.scroll : window.scrollY;
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -82,8 +95,23 @@ export default function App() {
     };
   }, []);
 
+  // Optional query param navigation for automated verification
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const targetSection = params.get('section');
+    if (targetSection) {
+      setTimeout(() => {
+        const el = document.getElementById(targetSection);
+        if (el) {
+          window.scrollTo(0, el.offsetTop);
+        }
+      }, 500);
+    }
+  }, []);
+
   return (
-    <div className="relative min-h-screen bg-cobalt-blue text-cobalt-paper font-sans selection:bg-cobalt-yellow selection:text-cobalt-ink overflow-x-hidden antialiased">
+    <div className="relative min-h-screen bg-primary text-paper font-sans selection:bg-accent-2 selection:text-ink overflow-x-hidden antialiased">
       {/* 1. Full-Screen Ink Curtain Loader with Center Confetti Burst */}
       {loading && (
         <Loader
@@ -104,15 +132,8 @@ export default function App() {
       {/* 5. Minimal Swiss Navigation */}
       <Nav onOpenResume={() => setIsResumeOpen(true)} />
 
-      {/* 6. Main Content Spine with Headline Skew on Velocity */}
-      <main
-        className="relative z-10 w-full overflow-hidden"
-        style={{
-          // Subtle headline skew on fast scroll velocity (max 2deg)
-          transform: scrollVelocity > 40 ? `skewY(${Math.min(2, (scrollVelocity - 40) * 0.03)}deg)` : 'none',
-          transition: 'transform 0.15s ease-out',
-        }}
-      >
+      {/* 6. Main Content Spine (Stable scrolling & responsive container) */}
+      <main className="relative z-10 w-full overflow-hidden">
         {/* Section 01: Hero (Sticky sheet with letter stretch and background shapes) */}
         <Hero scrollVelocity={scrollVelocity} scrollProgress={scrollProgress} />
 

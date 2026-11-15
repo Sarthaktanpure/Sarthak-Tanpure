@@ -17,44 +17,44 @@ export default function Contact() {
   return (
     <footer
       id="contact"
-      className="relative z-20 bg-cobalt-blue text-cobalt-paper pt-32 sm:pt-44 pb-16 px-6 sm:px-12 border-t-2 border-cobalt-paper/20 overflow-hidden"
+      className="relative z-20 bg-primary text-paper pt-32 sm:pt-44 pb-16 px-6 sm:px-12 border-t-2 border-paper/20 overflow-hidden"
       aria-label="Direct Contact and Communication Channel"
     >
-      {/* Corner Floating Shapes: Big Red Circle & Yellow Half-Moon with Gentle Idle Float */}
+      {/* Corner Floating Shapes: Accent 1 Circle & Accent 2 Half-Moon with Gentle Idle Float */}
       <div className="absolute -bottom-16 -right-16 pointer-events-none select-none z-0" aria-hidden="true">
-        {/* Big Red Circle */}
-        <div className="w-72 sm:w-[420px] h-72 sm:h-[420px] rounded-full bg-cobalt-red animate-idle-float" />
-        {/* Yellow Half-Moon */}
-        <div className="absolute top-12 left-12 w-52 sm:w-80 h-26 sm:h-40 bg-cobalt-yellow rounded-t-full rotate-45 animate-idle-float-rev" />
+        {/* Accent 1 Circle */}
+        <div className="w-72 sm:w-[420px] h-72 sm:h-[420px] rounded-full bg-accent-1 animate-idle-float" />
+        {/* Accent 2 Half-Moon */}
+        <div className="absolute top-12 left-12 w-52 sm:w-80 h-26 sm:h-40 bg-accent-2 rounded-t-full rotate-45 animate-idle-float-rev" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 flex flex-col justify-between min-h-[65vh]">
         {/* Header Label with 2px Rule */}
-        <div className="flex items-center gap-3 border-b-2 border-cobalt-paper/30 pb-6 mb-12">
-          <div className="w-4 h-4 bg-cobalt-yellow rounded-full" />
-          <span className="caption-mono font-black text-xs sm:text-sm text-cobalt-paper tracking-widest">
+        <div className="flex items-center gap-3 border-b-2 border-paper/30 pb-6 mb-12">
+          <div className="w-4 h-4 bg-accent-2 rounded-full" />
+          <span className="caption-mono font-black text-xs sm:text-sm text-paper tracking-widest">
             05 // GET IN TOUCH & DIRECT COLLABORATION
           </span>
         </div>
 
         {/* Master Invitation & Giant Lowercase Email */}
         <div className="my-auto py-8">
-          <p className="caption-mono text-cobalt-paper/80 text-sm sm:text-base mb-6 font-bold tracking-wider">
+          <p className="caption-mono text-paper/80 text-sm sm:text-base mb-6 font-bold tracking-wider">
             OPEN FOR SOFTWARE ENGINEERING INTERNSHIPS & RESEARCH ROLES:
           </p>
 
-          {/* Giant Lowercase Email Link with Yellow Underline Wipe on Hover */}
-          <div className="relative inline-block group">
+          {/* Giant Lowercase Email Link with Accent 2 Underline Wipe on Hover */}
+          <div className="relative inline-block group max-w-full">
             <a
               href={DATA.links.emailMailto}
-              className="poster-headline text-[7.5vw] sm:text-[6.5vw] md:text-[5.5vw] font-black lowercase tracking-poster text-cobalt-paper hover:text-cobalt-yellow transition-colors block leading-tight break-all select-all"
+              className="poster-headline text-[7.5vw] sm:text-[6.5vw] md:text-[5.5vw] font-black lowercase tracking-poster text-paper hover:text-accent-2 transition-colors block leading-tight break-all select-all"
               aria-label={`Send email to ${DATA.email}`}
             >
               {DATA.email}
             </a>
-            {/* Yellow Underline that Wipes In on Hover */}
+            {/* Accent 2 Underline that Wipes In on Hover */}
             <span
-              className="absolute left-0 bottom-1 w-full h-[6px] sm:h-[8px] bg-cobalt-yellow origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="absolute left-0 bottom-1 w-full h-[6px] sm:h-[8px] bg-accent-2 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
               aria-hidden="true"
             />
           </div>
@@ -65,16 +65,16 @@ export default function Contact() {
               ref={sayHelloBtn.ref as React.RefObject<HTMLAnchorElement>}
               style={sayHelloBtn.style}
               href={DATA.links.emailMailto}
-              className="px-7 py-4 bg-cobalt-yellow text-cobalt-ink font-black caption-mono text-xs uppercase hover:bg-white transition-all shadow-[4px_4px_0px_#0A0E3A] cursor-pointer"
+              className="px-7 py-4 bg-accent-2 text-ink font-black caption-mono text-xs uppercase hover:bg-white transition-all shadow-[4px_4px_0px_var(--ink)] cursor-pointer"
             >
               SAY HELLO
             </a>
 
             <button
               onClick={handleCopy}
-              className="px-6 py-4 border-2 border-cobalt-paper text-cobalt-paper font-black caption-mono text-xs uppercase hover:bg-cobalt-paper hover:text-cobalt-ink transition-all flex items-center gap-2 cursor-pointer"
+              className="px-6 py-4 border-2 border-paper text-paper font-black caption-mono text-xs uppercase hover:bg-paper hover:text-ink transition-all flex items-center gap-2 cursor-pointer"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-accent-2" /> : <Copy className="w-4 h-4" />}
               <span>{copied ? 'EMAIL COPIED' : 'COPY EMAIL'}</span>
             </button>
 
@@ -84,7 +84,7 @@ export default function Contact() {
               href={DATA.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-7 py-4 border-2 border-cobalt-paper text-cobalt-paper font-black caption-mono text-xs uppercase hover:bg-cobalt-paper hover:text-cobalt-ink transition-all flex items-center gap-2 cursor-pointer"
+              className="px-7 py-4 border-2 border-paper text-paper font-black caption-mono text-xs uppercase hover:bg-paper hover:text-ink transition-all flex items-center gap-2 cursor-pointer"
             >
               <FileText className="w-4 h-4" />
               <span>RÉSUMÉ (PDF)</span>
@@ -93,9 +93,9 @@ export default function Contact() {
         </div>
 
         {/* Minimal Footer Row */}
-        <div className="border-t-2 border-cobalt-paper/30 pt-8 mt-20 flex flex-col sm:flex-row sm:items-center justify-between gap-6 caption-mono text-xs text-cobalt-paper/75">
+        <div className="border-t-2 border-paper/30 pt-8 mt-20 flex flex-col sm:flex-row sm:items-center justify-between gap-6 caption-mono text-xs text-paper/75">
           <div>
-            <span className="font-black text-cobalt-paper">SARTHAK TANPURE</span> • PREC LONI (B.E. IT RANK 1)
+            <span className="font-black text-paper">SARTHAK TANPURE</span> • PREC LONI (B.E. IT RANK 1)
           </div>
 
           <div className="flex items-center gap-6">
@@ -103,7 +103,7 @@ export default function Contact() {
               href={DATA.links.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-cobalt-yellow transition-colors font-bold"
+              className="hover:text-accent-2 transition-colors font-bold"
             >
               GITHUB
             </a>
@@ -111,7 +111,7 @@ export default function Contact() {
               href={DATA.links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-cobalt-yellow transition-colors font-bold"
+              className="hover:text-accent-2 transition-colors font-bold"
             >
               LINKEDIN
             </a>
@@ -119,7 +119,7 @@ export default function Contact() {
               href={DATA.links.leetcode}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-cobalt-yellow transition-colors font-bold"
+              className="hover:text-accent-2 transition-colors font-bold"
             >
               LEETCODE
             </a>

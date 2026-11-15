@@ -44,7 +44,7 @@ export default function Loader({ onComplete, onBurst }: LoaderProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-cobalt-ink text-cobalt-paper flex flex-col justify-between p-6 sm:p-12 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
+      className={`fixed inset-0 z-[9999] bg-ink text-paper flex flex-col justify-between p-6 sm:p-12 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
         isSlidingUp ? '-translate-y-full' : 'translate-y-0'
       }`}
       aria-hidden={isSlidingUp}
@@ -54,11 +54,11 @@ export default function Loader({ onComplete, onBurst }: LoaderProps) {
       aria-valuemax={100}
     >
       {/* Top Header */}
-      <div className="flex items-center justify-between border-b-2 border-cobalt-paper/20 pb-4">
-        <span className="caption-mono text-cobalt-paper/80 font-bold tracking-widest text-xs">
+      <div className="flex items-center justify-between border-b-2 border-paper/20 pb-4">
+        <span className="caption-mono text-paper/80 font-bold tracking-widest text-xs">
           SARTHAK TANPURE
         </span>
-        <span className="caption-mono text-cobalt-yellow font-bold text-xs">
+        <span className="caption-mono text-accent-2 font-bold text-xs">
           EDITION // 2026
         </span>
       </div>
@@ -66,27 +66,27 @@ export default function Loader({ onComplete, onBurst }: LoaderProps) {
       {/* Center Giant Counter: Archivo wdth 62, ~34vw */}
       <div className="flex flex-col items-start my-auto">
         <div
-          className="text-[34vw] font-black leading-[0.8] tracking-poster-tight text-cobalt-paper"
+          className="text-[34vw] font-black leading-[0.8] tracking-poster-tight text-paper"
           style={{
             fontVariationSettings: "'wdth' 62, 'wght' 900",
           }}
         >
           {String(count).padStart(3, '0')}
         </div>
-        <p className="caption-mono text-cobalt-paper/60 text-xs sm:text-sm mt-4 tracking-wider">
+        <p className="caption-mono text-paper/60 text-xs sm:text-sm mt-4 tracking-wider">
           SYSTEM LOADING // SWISS POSTER ARCHITECTURE
         </p>
       </div>
 
       {/* Bottom Status */}
-      <div className="flex items-center justify-between border-t-2 border-cobalt-paper/20 pt-4">
+      <div className="flex items-center justify-between border-t-2 border-paper/20 pt-4">
         <div className="flex items-center gap-3">
-          <div className="w-3.5 h-3.5 rounded-full bg-cobalt-red animate-pulse" />
-          <span className="caption-mono text-cobalt-paper/80 text-xs">
-            COBALT // READY
+          <div className="w-3.5 h-3.5 rounded-full bg-accent-1 animate-pulse" />
+          <span className="caption-mono text-paper/80 text-xs">
+            OXBLOOD // READY
           </span>
         </div>
-        <span className="caption-mono text-cobalt-yellow font-bold text-xs">
+        <span className="caption-mono text-accent-2 font-bold text-xs">
           {count}%
         </span>
       </div>

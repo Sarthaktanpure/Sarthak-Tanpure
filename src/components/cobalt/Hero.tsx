@@ -100,7 +100,7 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
     <section
       id="hero"
       ref={containerRef}
-      className="sticky top-0 h-[100dvh] w-full bg-cobalt-blue text-cobalt-paper pt-24 sm:pt-32 pb-8 px-6 sm:px-12 flex flex-col justify-between overflow-hidden z-10"
+      className="sticky top-0 h-[100dvh] w-full bg-primary text-paper pt-24 sm:pt-32 pb-8 px-6 sm:px-12 flex flex-col justify-between overflow-hidden z-10"
       style={{
         opacity: heroOpacity,
         transform: `scale(${heroScale})`,
@@ -109,17 +109,17 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
     >
       {/* Background Shapes with Idle Loops & Parallax */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0" aria-hidden="true">
-        {/* 1. Red Circle: Breathes (idle pulse) + scroll parallax */}
+        {/* 1. Accent 1 Circle: Breathes (idle pulse) + scroll parallax */}
         <div
-          className="absolute -top-12 -right-12 sm:top-8 sm:right-16 w-52 sm:w-88 h-52 sm:h-88 rounded-full bg-cobalt-red animate-idle-breathe"
+          className="absolute -top-12 -right-12 sm:top-8 sm:right-16 w-52 sm:w-88 h-52 sm:h-88 rounded-full bg-accent-1 animate-idle-breathe"
           style={{
             transform: `translate3d(0, ${scrollProgress * 260}px, 0)`,
           }}
         />
 
-        {/* 2. Yellow Half-Moon: Rocks (idle swing) + scroll parallax */}
+        {/* 2. Accent 2 Half-Moon: Rocks (idle swing) + scroll parallax */}
         <div
-          className="absolute top-[44%] -right-12 sm:right-28 w-56 sm:w-76 h-28 sm:h-38 bg-cobalt-yellow rounded-t-full animate-idle-rock"
+          className="absolute top-[44%] -right-12 sm:right-28 w-56 sm:w-76 h-28 sm:h-38 bg-accent-2 rounded-t-full animate-idle-rock"
           style={{
             transform: `translate3d(0, ${scrollProgress * 180}px, 0) rotate(-45deg)`,
           }}
@@ -127,7 +127,7 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
 
         {/* 3. Thin Ring: Spins & pulses + scroll parallax */}
         <div
-          className="absolute top-[30%] left-[3%] sm:left-[7%] w-40 sm:w-64 h-40 sm:h-64 rounded-full border-2 border-cobalt-paper/35 animate-idle-spin-pulse"
+          className="absolute top-[30%] left-[3%] sm:left-[7%] w-40 sm:w-64 h-40 sm:h-64 rounded-full border-2 border-paper/35 animate-idle-spin-pulse"
           style={{
             transform: `translate3d(0, ${-scrollProgress * 150}px, 0)`,
           }}
@@ -141,7 +141,7 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
           }}
         >
           {Array.from({ length: 36 }).map((_, i) => (
-            <div key={i} className="w-2.5 h-2.5 rounded-full bg-cobalt-paper" />
+            <div key={i} className="w-2.5 h-2.5 rounded-full bg-paper" />
           ))}
         </div>
       </div>
@@ -154,7 +154,7 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
         }}
       >
         <div
-          className="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center animate-spin-slow"
+          className="relative w-28 h-28 sm:w-40 sm:h-40 flex items-center justify-center animate-spin-slow"
           style={{
             transform: `rotate(${stickerScrollRotate}deg)`,
           }}
@@ -165,21 +165,21 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
               d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
               fill="none"
             />
-            <text className="text-[8.5px] font-mono uppercase tracking-[0.24em] fill-cobalt-paper font-black">
+            <text className="text-[8.5px] font-mono uppercase tracking-[0.24em] fill-paper font-black">
               <textPath href="#heroStickerPath" startOffset="0%">
                 CLICK ANYWHERE — MAKE A MESS —
               </textPath>
             </text>
           </svg>
-          {/* Yellow center dot pulsing to red */}
-          <div className="absolute w-5 h-5 rounded-full bg-cobalt-yellow animate-dot-pulse shadow-[0_0_14px_rgba(255,212,0,0.6)]" />
+          {/* Accent 2 center dot pulsing to Accent 1 */}
+          <div className="absolute w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-accent-2 animate-dot-pulse shadow-[0_0_14px_color-mix(in_srgb,var(--accent-2)_60%,transparent)]" />
         </div>
       </div>
 
       {/* Hero Name Typography Stack (Clips In with 35ms Stagger) */}
       <div className="relative z-10 max-w-7xl w-full my-auto py-4 select-none">
         <h1
-          className="poster-headline text-[15.5vw] sm:text-[14vw] md:text-[13.4vw] font-black leading-[0.84] text-cobalt-paper flex flex-col tracking-poster"
+          className="poster-headline text-[15.5vw] sm:text-[14vw] md:text-[13.4vw] font-black leading-[0.84] text-paper flex flex-col tracking-poster"
           aria-label={`${DATA.firstName} ${DATA.lastName}`}
         >
           {/* Line 1: SARTHAK */}
@@ -233,12 +233,12 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
 
       {/* Bottom Row: Tagline + "See the work" Button above a 2px rule */}
       <div
-        className="relative z-10 max-w-7xl w-full border-t-2 border-cobalt-paper/30 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
+        className="relative z-10 max-w-7xl w-full border-t-2 border-paper/30 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
         style={{
           animation: 'fadeEnterRow 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards',
         }}
       >
-        <p className="poster-body text-base sm:text-lg md:text-xl text-cobalt-paper font-medium max-w-2xl leading-snug">
+        <p className="poster-body text-base sm:text-lg md:text-xl text-paper font-medium max-w-2xl leading-snug">
           {DATA.tagline}
         </p>
 
@@ -246,7 +246,7 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
           ref={magneticBtn.ref as React.RefObject<HTMLButtonElement>}
           style={magneticBtn.style}
           onClick={scrollToWork}
-          className="inline-flex items-center gap-3 px-6 py-3.5 bg-cobalt-yellow text-cobalt-ink font-black caption-mono text-xs uppercase hover:bg-white transition-all shadow-[4px_4px_0px_#0A0E3A] group self-start md:self-auto cursor-pointer"
+          className="inline-flex items-center gap-3 px-6 py-3.5 bg-accent-2 text-ink font-black caption-mono text-xs uppercase hover:bg-white transition-all shadow-[4px_4px_0px_var(--ink)] group self-start md:self-auto cursor-pointer"
         >
           <span>SEE THE WORK</span>
           <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
@@ -316,11 +316,11 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
         }
         @keyframes dotPulse {
           0%, 100% {
-            background-color: #FFD400;
+            background-color: var(--accent-2);
             transform: scale(1);
           }
           50% {
-            background-color: #FF4A1C;
+            background-color: var(--accent-1);
             transform: scale(1.3);
           }
         }

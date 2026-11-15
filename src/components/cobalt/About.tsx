@@ -42,18 +42,18 @@ export default function About({ scrollProgress = 0 }: AboutProps) {
     <section
       id="about"
       ref={sectionRef}
-      className="relative z-20 bg-cobalt-paper text-cobalt-ink pt-28 sm:pt-36 pb-28 px-6 sm:px-12 sheet-rounded shadow-[0_-28px_56px_rgba(10,14,58,0.20)] border-t-2 border-cobalt-ink/20 overflow-hidden"
+      className="relative z-20 bg-paper text-ink pt-28 sm:pt-36 pb-28 px-6 sm:px-12 sheet-rounded shadow-[0_-28px_56px_color-mix(in_srgb,var(--ink)_20%,transparent)] border-t-2 border-ink/20 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header with 2px Rule */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b-2 border-cobalt-ink pb-6 mb-16">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b-2 border-ink pb-6 mb-16">
           <div className="flex items-center gap-3">
-            <div className="w-4 h-4 bg-cobalt-red rounded-full" />
-            <h2 className="caption-mono font-black text-cobalt-ink text-xs sm:text-sm">
+            <div className="w-4 h-4 bg-accent-1 rounded-full" />
+            <h2 className="caption-mono font-black text-ink text-xs sm:text-sm">
               01 // STATEMENT & PERSPECTIVE
             </h2>
           </div>
-          <span className="caption-mono text-cobalt-ink/60 text-xs">
+          <span className="caption-mono text-ink/60 text-xs">
             SWISS POSTER FORMAT // 2026
           </span>
         </div>
@@ -71,7 +71,7 @@ export default function About({ scrollProgress = 0 }: AboutProps) {
                     key={i}
                     className="inline-block mr-2.5 sm:mr-3.5 transition-colors duration-300 ease-out"
                     style={{
-                      color: isLit ? '#0A0E3A' : 'rgba(10, 14, 58, 0.22)',
+                      color: isLit ? 'var(--ink)' : 'color-mix(in srgb, var(--ink) 22%, transparent)',
                       fontVariationSettings: isLit ? "'wdth' 105, 'wght' 900" : "'wdth' 90, 'wght' 800",
                     }}
                   >
@@ -82,53 +82,53 @@ export default function About({ scrollProgress = 0 }: AboutProps) {
             </h3>
 
             {/* Quick Metrics Strip */}
-            <div className="mt-16 pt-8 border-t-2 border-cobalt-ink/15 grid grid-cols-2 sm:grid-cols-3 gap-6">
+            <div className="mt-16 pt-8 border-t-2 border-ink/15 grid grid-cols-2 sm:grid-cols-3 gap-6">
               <div>
-                <span className="caption-mono text-cobalt-ink/60 text-[11px] block">ACADEMIC STANDING</span>
-                <span className="poster-headline text-2xl sm:text-3xl text-cobalt-blue font-black mt-1 block">
+                <span className="caption-mono text-ink/60 text-[11px] block">ACADEMIC STANDING</span>
+                <span className="poster-headline text-2xl sm:text-3xl text-primary font-black mt-1 block">
                   RANK 1
                 </span>
-                <span className="caption-mono text-xs text-cobalt-ink/80 mt-0.5 block">
+                <span className="caption-mono text-xs text-ink/80 mt-0.5 block">
                   8.67 CGPA // PREC LONI
                 </span>
               </div>
 
               <div>
-                <span className="caption-mono text-cobalt-ink/60 text-[11px] block">ALGORITHMIC RIGOR</span>
-                <span className="poster-headline text-2xl sm:text-3xl text-cobalt-red font-black mt-1 block">
+                <span className="caption-mono text-ink/60 text-[11px] block">ALGORITHMIC RIGOR</span>
+                <span className="poster-headline text-2xl sm:text-3xl text-accent-1 font-black mt-1 block">
                   250+
                 </span>
-                <span className="caption-mono text-xs text-cobalt-ink/80 mt-0.5 block">
+                <span className="caption-mono text-xs text-ink/80 mt-0.5 block">
                   JAVA PROBLEMS SOLVED
                 </span>
               </div>
 
               <div className="col-span-2 sm:col-span-1">
-                <span className="caption-mono text-cobalt-ink/60 text-[11px] block">TRANSACTION SCALE</span>
-                <span className="poster-headline text-2xl sm:text-3xl text-cobalt-ink font-black mt-1 block">
+                <span className="caption-mono text-ink/60 text-[11px] block">TRANSACTION SCALE</span>
+                <span className="poster-headline text-2xl sm:text-3xl text-ink font-black mt-1 block">
                   20,000+
                 </span>
-                <span className="caption-mono text-xs text-cobalt-ink/80 mt-0.5 block">
+                <span className="caption-mono text-xs text-ink/80 mt-0.5 block">
                   ML FRAUD DETECTION PIPELINE
                 </span>
               </div>
             </div>
 
             {/* Technical Skills Overview Grid */}
-            <div className="mt-12 pt-8 border-t-2 border-cobalt-ink/15">
-              <span className="caption-mono text-cobalt-blue font-black text-xs block mb-4 tracking-wider">
+            <div className="mt-12 pt-8 border-t-2 border-ink/15">
+              <span className="caption-mono text-primary font-black text-xs block mb-4 tracking-wider">
                 CORE TECHNICAL COMPETENCIES (FROM CURRICULUM VITAE)
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
-                <div className="p-3 bg-white/70 border border-cobalt-ink/20">
-                  <span className="font-black text-cobalt-ink block mb-1 text-[11px]">DATA & ANALYTICS / ML:</span>
-                  <span className="text-cobalt-ink/80 leading-relaxed block">
+                <div className="p-3 bg-white/70 border border-ink/20">
+                  <span className="font-black text-ink block mb-1 text-[11px]">DATA & ANALYTICS / ML:</span>
+                  <span className="text-ink/80 leading-relaxed block">
                     Data Analysis, Analytics Dashboards, Anomaly Detection, Predictive Modeling, Data Pipelines, PyTorch, XGBoost, Isolation Forest, CNN, PPO Deep RL.
                   </span>
                 </div>
-                <div className="p-3 bg-white/70 border border-cobalt-ink/20">
-                  <span className="font-black text-cobalt-ink block mb-1 text-[11px]">FULL-STACK & SYSTEMS:</span>
-                  <span className="text-cobalt-ink/80 leading-relaxed block">
+                <div className="p-3 bg-white/70 border border-ink/20">
+                  <span className="font-black text-ink block mb-1 text-[11px]">FULL-STACK & SYSTEMS:</span>
+                  <span className="text-ink/80 leading-relaxed block">
                     React.js, Node.js, Express.js, MERN Stack, REST APIs, Flask, Socket.IO, MongoDB, PostgreSQL, JWT & RBAC, Git, Postman, Vercel.
                   </span>
                 </div>
@@ -151,20 +151,20 @@ export default function About({ scrollProgress = 0 }: AboutProps) {
                   d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
                   fill="none"
                 />
-                <text className="text-[7.5px] font-mono uppercase tracking-[0.19em] fill-cobalt-ink font-black">
+                <text className="text-[7.5px] font-mono uppercase tracking-[0.19em] fill-ink font-black">
                   <textPath href="#aboutBadgeCircle" startOffset="0%">
                     APPLIED MACHINE LEARNING • SCALABLE SYSTEMS •
                   </textPath>
                 </text>
               </svg>
 
-              {/* Bold Red Center Circle */}
-              <div className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-cobalt-red shadow-lg flex items-center justify-center text-cobalt-paper font-black text-xs font-mono uppercase">
+              {/* Accent 1 Center Circle */}
+              <div className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-accent-1 shadow-lg flex items-center justify-center text-paper font-black text-xs font-mono uppercase">
                 ENGINEER
               </div>
             </div>
 
-            <p className="caption-mono text-center text-cobalt-ink/60 text-xs mt-8 max-w-xs">
+            <p className="caption-mono text-center text-ink/60 text-xs mt-8 max-w-xs">
               ENGINEERED FOR RIGOR, REPRODUCIBILITY, AND DETERMINISTIC BEHAVIOR.
             </p>
           </div>

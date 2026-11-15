@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  /* Swiss Cobalt Poster Palette */
-  --color-blue: #1B2BFF;
-  --color-paper: #F3F1EA;
-  --color-ink: #0A0E3A;
-  --color-red: #FF4A1C;
-  --color-yellow: #FFD400;
+  /* Oxblood & Sand Architectural Palette */
+  --primary: #6B1022;
+  --paper: #F3E9DC;
+  --ink: #1A0A0D;
+  --accent-1: #FF7A45;
+  --accent-2: #E8C468;
 
   --rule-width: 2px;
   --sheet-radius: 44px;
@@ -22,8 +22,8 @@
 
 /* High-contrast Selection */
 ::selection {
-  background-color: #FFD400;
-  color: #0A0E3A;
+  background-color: var(--accent-2);
+  color: var(--ink);
 }
 
 /* Custom Minimal Scrollbar */
@@ -32,14 +32,14 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #1B2BFF;
+  background: var(--primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #F3F1EA;
-  border: 2px solid #1B2BFF;
+  background: var(--paper);
+  border: 2px solid var(--primary);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #FFD400;
+  background: var(--accent-2);
 }
 
 /* 7% Multiply Faint Paper Grain Overlay */
@@ -94,8 +94,9 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid #FFD400 !important;
+  outline: 3px solid var(--accent-2) !important;
   outline-offset: 3px !important;
+  box-shadow: 0 0 0 2px var(--ink) !important;
 }
 
 /* Sheet Top Corners */
@@ -105,13 +106,13 @@ textarea:focus-visible {
 }
 
 /* 2px Solid Ruled Dividers */
-.rule-blue {
-  border-color: rgba(243, 241, 234, 0.28);
+.rule-primary {
+  border-color: color-mix(in srgb, var(--paper) 28%, transparent);
   border-width: 2px;
 }
 
 .rule-paper {
-  border-color: rgba(10, 14, 58, 0.20);
+  border-color: color-mix(in srgb, var(--ink) 20%, transparent);
   border-width: 2px;
 }
 

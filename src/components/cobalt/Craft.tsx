@@ -52,24 +52,24 @@ export default function Craft({ scrollVelocity = 0 }: CraftProps) {
     <section
       id="craft"
       ref={containerRef}
-      className="relative z-20 bg-cobalt-blue text-cobalt-paper py-32 sm:py-48 px-4 overflow-hidden border-t-2 border-b-2 border-cobalt-paper/20"
+      className="relative z-20 bg-primary text-paper py-32 sm:py-48 px-4 overflow-hidden border-t-2 border-b-2 border-paper/20"
       aria-label="Core Engineering Technologies and Craft"
     >
       {/* Background Section Title */}
       <div className="max-w-7xl mx-auto px-6 mb-20 text-center select-none">
-        <span className="caption-mono text-cobalt-paper/70 text-xs font-bold block mb-3">
+        <span className="caption-mono text-paper/70 text-xs font-bold block mb-3">
           03 // ARSENAL & PROFICIENCY
         </span>
-        <h2 className="poster-headline text-5xl sm:text-7xl md:text-8xl text-cobalt-paper font-black tracking-poster">
+        <h2 className="poster-headline text-5xl sm:text-7xl md:text-8xl text-paper font-black tracking-poster">
           CRAFT & ENGINE
         </h2>
       </div>
 
       {/* Two Tilted Marquee Bands Crossing in an X */}
       <div className="relative w-full py-16 flex items-center justify-center">
-        {/* Band 1: Yellow, -4deg, Ink text, scrolls Left */}
+        {/* Band 1: Accent 2 (Sand Yellow), -4deg, Ink text, scrolls Left */}
         <div
-          className="absolute w-[130vw] -left-[15vw] bg-cobalt-yellow text-cobalt-ink py-5 sm:py-7 shadow-[0_16px_40px_rgba(10,14,58,0.38)] z-10 border-y-2 border-cobalt-ink transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="absolute w-[130vw] -left-[15vw] bg-accent-2 text-ink py-5 sm:py-7 shadow-[0_16px_40px_color-mix(in_srgb,var(--ink)_38%,transparent)] z-10 border-y-2 border-ink transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
             transform: `rotate(${yellowTilt}deg)`,
           }}
@@ -89,8 +89,8 @@ export default function Craft({ scrollVelocity = 0 }: CraftProps) {
                   key={idx}
                   className={`poster-headline text-3xl sm:text-5xl md:text-6xl mx-6 font-black tracking-poster inline-block ${
                     isOutlined
-                      ? 'text-transparent [-webkit-text-stroke:2px_#0A0E3A]'
-                      : 'text-cobalt-ink'
+                      ? 'text-transparent [-webkit-text-stroke:2px_var(--ink)]'
+                      : 'text-ink'
                   }`}
                 >
                   {item} •
@@ -102,7 +102,7 @@ export default function Craft({ scrollVelocity = 0 }: CraftProps) {
 
         {/* Band 2: Ink, +3.5deg, Paper text, scrolls Right */}
         <div
-          className="relative w-[130vw] -left-[15vw] bg-cobalt-ink text-cobalt-paper py-5 sm:py-7 shadow-[0_20px_48px_rgba(10,14,58,0.5)] z-20 border-y-2 border-cobalt-paper/30 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="relative w-[130vw] -left-[15vw] bg-ink text-paper py-5 sm:py-7 shadow-[0_20px_48px_color-mix(in_srgb,var(--ink)_50%,transparent)] z-20 border-y-2 border-paper/30 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
             transform: `rotate(${inkTilt}deg)`,
           }}
@@ -122,8 +122,8 @@ export default function Craft({ scrollVelocity = 0 }: CraftProps) {
                   key={idx}
                   className={`poster-headline text-3xl sm:text-5xl md:text-6xl mx-6 font-black tracking-poster inline-block ${
                     isOutlined
-                      ? 'text-transparent [-webkit-text-stroke:2px_#F3F1EA]'
-                      : 'text-cobalt-paper'
+                      ? 'text-transparent [-webkit-text-stroke:2px_var(--paper)]'
+                      : 'text-paper'
                   }`}
                 >
                   {item} •
