@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { DATA, Project } from '../../data';
 import { Plus, X, ArrowUpRight } from 'lucide-react';
 import { GithubIcon } from '../Icons';
+import ProjectScene from './ProjectScene';
 
 export default function Work() {
   const [openId, setOpenId] = useState<string | null>(DATA.projects[0].id);
@@ -180,6 +181,7 @@ export default function Work() {
                   <div className="accordion-inner">
                     <div className="p-6 sm:p-12 border-t-2 border-ink/20">
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                        <div className="lg:col-span-12"><ProjectScene project={project} /></div>
                         {/* Problem / Approach / Result: Using var(--primary) labels on paper per Rule 7 */}
                         <div className="lg:col-span-7 space-y-6">
                           <div>
@@ -266,6 +268,7 @@ export default function Work() {
                               <GithubIcon className="w-4 h-4" />
                               <span>INSPECT REPO</span>
                             </a>
+                            {project.liveUrl && project.liveUrl !== project.githubUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-3 border-2 border-ink text-ink font-black caption-mono text-xs uppercase hover:bg-ink hover:text-paper transition-all">LIVE PROJECT ↗</a>}
                           </div>
                         </div>
                       </div>

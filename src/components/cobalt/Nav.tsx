@@ -47,6 +47,7 @@ export default function Nav({ onOpenResume }: NavProps) {
           >
             ABOUT
           </button>
+          <button onClick={() => scrollTo('craft')} className="hidden md:inline-block hover:text-accent-2 transition-colors font-bold uppercase py-1 cursor-pointer">CAPABILITIES</button>
           <button
             onClick={() => scrollTo('notes')}
             className="hidden md:inline-block hover:text-accent-2 transition-colors font-bold uppercase py-1 cursor-pointer"
@@ -55,7 +56,7 @@ export default function Nav({ onOpenResume }: NavProps) {
           </button>
           
           <a
-            href={DATA.resumeUrl}
+            href={DATA.links.resumePdf}
             target="_blank"
             rel="noopener noreferrer"
             className="px-2.5 sm:px-3 py-1 sm:py-1.5 border-2 border-paper text-paper hover:bg-paper hover:text-ink font-bold transition-all uppercase"

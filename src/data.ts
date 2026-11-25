@@ -19,6 +19,7 @@ export interface Project {
   bullets: string[];
   githubUrl: string;
   liveUrl?: string;
+  previewImage?: string;
 }
 
 export interface NoteItem {
@@ -120,7 +121,9 @@ export const DATA: PortfolioData = {
         "Integrated a Flask-based ML service using XGBoost (supervised learning) and Isolation Forest (anomaly detection), enabling real-time fraud scoring and alert generation; debugged data-pipeline and API integration issues.",
         "Developed a role-based React analytics dashboard with real-time fraud metrics, transaction monitoring and alert investigation workflows, presenting data-driven insights to analysts."
       ],
-      githubUrl: "https://github.com/Sarthaktanpure/Fraud-Detection-System"
+      githubUrl: "https://github.com/Sarthaktanpure/Fraud-Detection-System",
+      liveUrl: "https://github.com/Sarthaktanpure/Fraud-Detection-System",
+      previewImage: "/media/confusion_matrix.png"
     },
     {
       id: "developer-networking",
@@ -144,7 +147,9 @@ export const DATA: PortfolioData = {
         "Optimized MongoDB queries using indexing and aggregation pipelines, reducing average API response time by ∼30%.",
         "Integrated Socket.IO for real-time chat and instant message delivery with persistent conversation storage."
       ],
-      githubUrl: "https://github.com/Sarthaktanpure/Developer-Networking-Platform"
+      githubUrl: "https://github.com/Sarthaktanpure/Developer-Networking-Platform",
+      liveUrl: "https://github.com/Sarthaktanpure/Developer-Networking-Platform",
+      previewImage: "/media/camera_view.png"
     },
     {
       id: "autonomous-navigation",
@@ -166,7 +171,48 @@ export const DATA: PortfolioData = {
         "Designed reward functions for lane-centering, speed regulation and collision avoidance, enabling stable lane-following and continuous control in simulation.",
         "Trained, evaluated and debugged the model across multiple track configurations, achieving full-lap navigation and generalization to mountain-track scenarios."
       ],
-      githubUrl: "https://github.com/Sarthaktanpure/Autonomous-Navigation"
+      githubUrl: "https://github.com/Sarthaktanpure/Autonomous-Navigation",
+      liveUrl: "https://github.com/Sarthaktanpure/Autonomous-Navigation",
+      previewImage: "/media/Mountain_Track.png"
+    },
+    {
+      id: "medvision-ai",
+      index: "04",
+      title: "MedVision AI",
+      dates: "PROJECT",
+      category: "Radiology Diagnostic Platform",
+      tags: ["React", "TypeScript", "FastAPI", "PyTorch", "Grad-CAM", "MongoDB"],
+      shape: "circle",
+      shapeColor: "var(--accent-1)",
+      problem: "Radiology workflows benefit from scan analysis that pairs model output with an interpretable visual explanation.",
+      approach: "Built a clinical radiology platform combining scan analysis with explainable AI using Grad-CAM.",
+      result: "Project description reports 50–150ms GPU inference latency.",
+      keyMetric: "50–150ms",
+      metricLabel: "REPORTED GPU INFERENCE LATENCY",
+      stack: ["React", "TypeScript", "FastAPI", "PyTorch", "Grad-CAM", "MongoDB"],
+      bullets: ["Combines scan analysis with explainable AI visualizations."],
+      githubUrl: "https://github.com/Sarthaktanpure/MedVisionAI",
+      liveUrl: "https://med-vision-ai-green.vercel.app/",
+      previewImage: "/media/roc_curve.png"
+    },
+    {
+      id: "agriconnect",
+      index: "05",
+      title: "AgriConnect",
+      dates: "PROJECT",
+      category: "Farmer-to-Buyer Marketplace",
+      tags: ["React", "Node.js", "MongoDB", "Socket.IO", "Razorpay"],
+      shape: "triangle",
+      shapeColor: "var(--primary)",
+      problem: "Farmers and buyers need a direct marketplace for listings, bidding, communication, and order tracking.",
+      approach: "Built a marketplace with real-time bidding, chat, and order tracking.",
+      result: "Project description reports 100–300ms indexed MongoDB response times.",
+      keyMetric: "100–300ms",
+      metricLabel: "REPORTED INDEXED DATABASE RESPONSE",
+      stack: ["React", "Node.js", "MongoDB", "Socket.IO", "Razorpay"],
+      bullets: ["Connects farmers and buyers with real-time marketplace workflows."],
+      githubUrl: "https://github.com/Sarthaktanpure/Agriconnect",
+      liveUrl: "https://agriconnect-ohet.vercel.app/"
     }
   ],
   toolBands: {

@@ -95,6 +95,10 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setLoading(false);
+  }, []);
+
   // Optional query param navigation for automated verification
   useEffect(() => {
     if (typeof window === 'undefined') return;

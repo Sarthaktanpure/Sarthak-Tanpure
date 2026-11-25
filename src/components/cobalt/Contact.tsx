@@ -81,7 +81,7 @@ export default function Contact() {
             <a
               ref={resumeBtn.ref as React.RefObject<HTMLAnchorElement>}
               style={resumeBtn.style}
-              href={DATA.resumeUrl}
+              href={DATA.links.resumePdf}
               target="_blank"
               rel="noopener noreferrer"
               className="px-7 py-4 border-2 border-paper text-paper font-black caption-mono text-xs uppercase hover:bg-paper hover:text-ink transition-all flex items-center gap-2 cursor-pointer"
