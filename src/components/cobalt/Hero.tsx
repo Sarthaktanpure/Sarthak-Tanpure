@@ -239,7 +239,7 @@ export default function Hero({ scrollVelocity = 0, scrollProgress = 0 }: HeroPro
         }}
       >
         <p className="poster-body text-base sm:text-lg md:text-xl text-paper font-medium max-w-2xl leading-snug">
-          {DATA.tagline}
+          {DATA.tagline} <span className="block mt-2 text-sm sm:text-base text-paper/75">Sarthak Tanpure — software developer focused on applied machine learning, AI, and full-stack engineering.</span>
         </p>
 
         <button
